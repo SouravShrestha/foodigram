@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, View, StyleSheet } from 'react-native';
 import WelcomeScreen from './components/WelcomeScreen';
 import NavigationScreen from './components/NavigationScreen';
+import HomeScreen from './components/HomeScreen';
 
 const App = () => {
   return (
