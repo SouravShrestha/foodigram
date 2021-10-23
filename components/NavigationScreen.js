@@ -5,7 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRef} from 'react';
 import HomeScreen from './HomeScreen';
-import SearchScreen from './SearchSreen';
+import SearchScreen from './SearchScreen';
 import {Images, Colors} from '../resources/resources';
 import ProfileScreen from './ProfileScreen';
 import AddScreen from './AddScreen';
