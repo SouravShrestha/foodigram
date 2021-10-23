@@ -1,0 +1,9 @@
++ react-native-screens@3.8.0
++ react-native-safe-area-context@3.3.2
+added 3 packages from 4 contributors and audited 1177 packages in 8.294s
+
+78 packages are looking for funding
+  run `npm fund` for details
+
+found 15 vulnerabilities (4 moderate, 11 high)
+  run `npm audit fix` to fix them, or `npm audit` for details
