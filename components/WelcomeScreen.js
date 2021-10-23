@@ -5,14 +5,16 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  StatusBar
 } from 'react-native';
-import {Colors, Images, Titles} from '../resources/resources';
+import {Colors, Images, Titles } from '../resources/resources';
 
 TouchableOpacity.defaultProps = {activeOpacity: 0.8};
 
 const WelcomeSreen = () => {
   return (
     <View style={styles.back__container}>
+      <StatusBar backgroundColor={Colors.primary} />
       <View style={styles.panel__top}>
         <Image source={Images.imgWelcome} style={styles.main__img} />
       </View>
