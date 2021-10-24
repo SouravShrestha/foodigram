@@ -135,7 +135,7 @@ function getWidth() {
 
 const styles = StyleSheet.create({
   img__tab: {
-    height: 25,
+    height: 23,
     width: '100%',
     aspectRatio: 1,
   },
