@@ -1,7 +1,41 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, FlatList} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Colors, Images, Titles} from '../../resources/resources';
+
+const INGREDIENTS = [
+  {
+    name: 'Tomato',
+    qunatity: 1,
+    color: Colors.ingredientRed,
+  },
+  {
+    name: 'Greens',
+    qunatity: 3,
+    color: Colors.ingredientGreen,
+  },
+  {
+    name: 'Onion',
+    qunatity: 5,
+    color: Colors.ingredientPurple,
+  },
+  {
+    name: 'Cheese',
+    qunatity: 1,
+    color: Colors.ingredientYellow,
+  },
+  {
+    name: 'Potato',
+    qunatity: 2,
+    color: Colors.ingredientGreen,
+  },
+];
+
+const STEPS = [
+  'Microwave or saute onion and bell pepper until soft; set aside to cool.',
+  'In a large salad bowl, combine the onion, pepper, salad greens, deli meat and tomato. Sprinkle with the onion powder, garlic powder, black pepper and salt. Toss to mix.',
+  'Pour on enough salad dressing or vinegar to coat, toss again and serve.',
+];
 
 const PostScreen = ({route, navigation}) => {
   const item = route.params;
@@ -14,14 +48,7 @@ const PostScreen = ({route, navigation}) => {
         </View>
         <View style={styles.container__contents}>
           <View style={styles.container__postDetails}>
-            <View
-              style={{
-                justifyContent: 'space-between',
-                height: '100%',
-                paddingVertical: 10,
-                paddingLeft: 15,
-                paddingRight: 10,
-              }}>
+            <View style={styles.container__postAbout}>
               <View style={{flexDirection: 'row'}}>
                 <Image
                   source={Images.iconFav}
@@ -47,16 +74,95 @@ const PostScreen = ({route, navigation}) => {
             </View>
           </View>
           <View style={styles.panelRecipeDetails}>
-            <View style={styles.container__recipeDetails}></View>
+            <View style={styles.container__recipeDetails}>
+              <Text style={styles.txt__postTitle}>{item._postTitle}</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: 15,
+                  marginTop: 10,
+                }}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Image source={Images.iconTimer} style={styles.img__time} />
+                  <Text style={styles.txt__time}>30 mins</Text>
+                </View>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Image source={Images.iconBurn} style={styles.img__time} />
+                  <Text style={styles.txt__time}>180 cal</Text>
+                </View>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Image source={Images.iconServe} style={styles.img__time} />
+                  <Text style={styles.txt__time}>3 serves</Text>
+                </View>
+              </View>
+            </View>
             <View style={styles.container__backRecipeDetails}></View>
           </View>
-          <View style={styles.panel__ingredients}></View>
-          <View style={styles.panel__instruction}></View>
+          <View style={styles.panel__ingredients}>
+            <Text style={styles.txt__sectionTitle}>Ingredients</Text>
+            <View style={styles.panel__allIngredients}>
+              <FlatList
+                data={INGREDIENTS}
+                renderItem={({item, index}) => (
+                  <IngredientView
+                    name={item.name}
+                    color={item.color}
+                    quantity={item.qunatity}
+                  />
+                )}
+                keyExtractor={(item, index) => item + index}
+                horizontal={true}
+              />
+            </View>
+          </View>
+          <View style={styles.panel__instruction}>
+            <Text style={styles.txt__sectionTitle}>Cooking instruction</Text>
+            <View style={{alignItems: 'center'}}>
+              <View style={styles.container__instruction}>{AllSteps}</View>
+            </View>
+          </View>
         </View>
+        <EmptyView />
       </ScrollView>
     </View>
   );
 };
+
+const AllSteps = STEPS.map((item, index) => {
+  const _styles = StyleSheet.create({
+    text_stepNo: {
+      fontSize: 16,
+      color: Colors.stepNo,
+      fontFamily: 'SFPro-Bold',
+    },
+    text_step: {
+      fontSize: 16,
+      color: Colors.black,
+      fontFamily: 'SFPro-Regular',
+      marginTop: 10,
+      letterSpacing: -0.1,
+      marginBottom: 20,
+    },
+  });
+  return (
+    <View key={index}>
+      <Text style={_styles.text_stepNo}>Step {index + 1}</Text>
+      <Text style={_styles.text_step}>{item}</Text>
+    </View>
+  );
+});
+
+const IngredientView = ({name, quantity, color}) => (
+  <View style={styles.container__ingredient}>
+    <View style={styles.panel_ingredientImage(color)}></View>
+    <Text style={styles.txt_ingredientName}>{name}</Text>
+    <Text style={styles.txt_ingredientQuantity}>{quantity} items</Text>
+  </View>
+);
+
+const EmptyView = () => <View style={{height: 110}}></View>;
 
 const styles = StyleSheet.create({
   panel__back: {
@@ -113,6 +219,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
     marginLeft: 12,
     lineHeight: 20,
+    paddingVertical: 5,
   },
   txt__postedOn: {
     fontSize: 10,
@@ -133,40 +240,99 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingRight: 10
+    paddingRight: 10,
   },
   container__recipeDetails: {
-    height: 90,
+    height: 75,
     width: '100%',
     borderColor: Colors.black,
     borderWidth: 2,
     borderRadius: 15,
     zIndex: 1,
+    justifyContent: 'center',
+  },
+  txt__postTitle: {
+    fontSize: 16,
+    color: Colors.black,
+    fontFamily: 'SFPro-Bold',
+    lineHeight: 20,
+    paddingLeft: 15,
+  },
+  img__time: {
+    height: 15,
+    width: 15,
+    tintColor: Colors.black,
+  },
+  txt__time: {
+    fontSize: 14,
+    color: Colors.black,
+    fontFamily: 'SFPro-Medium',
+    marginLeft: 8,
   },
   container__backRecipeDetails: {
-    height: 90,
+    height: 75,
     width: '100%',
     position: 'absolute',
     backgroundColor: Colors.primary,
     borderRadius: 15,
     top: 5,
     left: 5,
+    opacity: 0.7,
   },
   panelRecipeDetails: {
     width: '90%',
     marginTop: 25,
   },
+  panel__allIngredients: {
+    paddingVertical: 18,
+  },
   panel__ingredients: {
-    width: '95%',
+    width: '100%',
     height: 175,
-    backgroundColor: 'red',
     marginTop: 25,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+  },
+  container__ingredient: {
+    alignItems: 'center',
+    width: 75,
+    marginRight: 15,
+  },
+  panel_ingredientImage: color => ({
+    height: 75,
+    width: 75,
+    backgroundColor: color,
+    borderRadius: 8,
+  }),
+  txt_ingredientName: {
+    fontSize: 14,
+    color: Colors.black,
+    fontFamily: 'SFPro-Medium',
+    marginTop: 10,
+  },
+  txt_ingredientQuantity: {
+    fontSize: 11,
+    color: Colors.secondaryText,
+    fontFamily: 'SFPro-Medium',
+    marginTop: 2,
+  },
+  txt__sectionTitle: {
+    fontSize: 18,
+    color: Colors.black,
+    fontFamily: 'SFPro-SemiBold',
+    marginLeft: 5,
   },
   panel__instruction: {
     width: '95%',
     height: 400,
-    backgroundColor: 'pink',
-    marginTop: 25,
+    marginTop: 15,
+  },
+  container__instruction: {
+    width: '98%',
+    marginTop: 20,
+    backgroundColor: Colors.instructionBack,
+    borderRadius: 15,
+    padding: 20,
   },
   container__postDesc: {
     height: '100%',
@@ -174,6 +340,13 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     justifyContent: 'center',
     overflow: 'hidden',
+  },
+  container__postAbout: {
+    justifyContent: 'space-between',
+    height: '100%',
+    paddingVertical: 10,
+    paddingLeft: 15,
+    paddingRight: 10,
   },
 });
 

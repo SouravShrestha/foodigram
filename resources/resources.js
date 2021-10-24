@@ -6,7 +6,14 @@ export const Colors = {
     black: '#000',
     secondaryText: '#7B7B7B',
     red: '#EB5757',
-    inactiveIcon: '#C4C4C4'
+    inactiveIcon: '#C4C4C4',
+    ingredientGreen: '#87D5A7',
+    ingredientBlue: '#33CEE3',
+    ingredientPurple: '#DCA0E5',
+    ingredientRed: '#EF8686',
+    ingredientYellow: '#FCD55D',
+    instructionBack: '#FFE3BF',
+    stepNo: '#FF9A00'
 }
 
 export const Images = {
@@ -23,6 +30,9 @@ export const Images = {
     iconSave: require('../assets/images/icon-save.png'),
     iconShare: require('../assets/images/icon-share.png'),
     iconExplore: require('../assets/images/icon-explore.png'),
+    iconTimer: require('../assets/images/icon-timer.png'),
+    iconServe: require('../assets/images/icon-serve.png'),
+    iconBurn: require('../assets/images/icon-burn.png'),
     iconAvatar: require('../assets/images/avatar.png'),
     img1: require('../assets/images/img-1.png'),
     img2: require('../assets/images/img-2.png'),
