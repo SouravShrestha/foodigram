@@ -11,12 +11,21 @@ import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRef} from 'react';
+<<<<<<< HEAD:components/WelcomeComponent/NavigationScreen.js
 import SearchScreen from '../SearchComponent/SearchScreen';
 import {Images, Colors} from '../../resources/resources';
 import ProfileScreen from '../ProfileComponent/ProfileScreen';
 import AddScreen from '../AddComponent/AddScreen';
 import ExploreScreen from '../ExploreComponent/ExploreScreen';
 import HomeScreenNavigator from '../HomeComponent/HomeScreenNavigator';
+=======
+import HomeScreen from './HomeScreen';
+import SearchScreen from './SearchScreen';
+import {Images, Colors} from '../resources/resources';
+import ProfileScreen from './ProfileScreen';
+import AddScreen from './AddScreen';
+import ExploreScreen from './ExploreScreen';
+>>>>>>> 70d87b2f60f26c067c1efb9e794b0902e81ea759:components/NavigationScreen.js
 
 const Tab = createBottomTabNavigator();
 
