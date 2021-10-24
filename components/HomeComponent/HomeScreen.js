@@ -118,6 +118,7 @@ const POST_DATA = [
   },
   {},
 ];
+
 const StoriesView = () => (
   <View style={styles.panel__stories}>
     <FlatList

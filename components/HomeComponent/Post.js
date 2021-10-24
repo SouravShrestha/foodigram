@@ -28,7 +28,7 @@ const Post = ({
           <Image source={Images.iconShare} style={styles.img__icon} />
         </View>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate('Post')}>
+      <TouchableOpacity onPress={() => navigation.navigate('PostScreen')}>
         <View style={styles.container__imgPost}>
           <Image source={_postImages[0]} style={styles.img__post} />
         </View>
