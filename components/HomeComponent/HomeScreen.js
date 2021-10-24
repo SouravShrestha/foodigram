@@ -161,17 +161,7 @@ const HomeScreen = () => {
           data={POST_DATA}
           renderItem={({item, index}) =>
             index > 0 && index != POST_DATA.length - 1 ? (
-              <Post
-                _username={item._username}
-                _userAvatar={item._userAvatar}
-                _postImages={item._postImages}
-                _counterLikes={item._counterLikes}
-                _postTitle={item._postTitle}
-                _postDesc={item._postDesc}
-                _statusLiked={item._statusLiked}
-                _statusSaved={item._statusSaved}
-                _id={item._id}
-              />
+              <Post item={item} />
             ) : index == 0 ? (
               <StoriesView />
             ) : (

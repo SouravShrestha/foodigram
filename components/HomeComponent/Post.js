@@ -5,32 +5,22 @@ import { useNavigation } from '@react-navigation/native';
 
 TouchableOpacity.defaultProps = {activeOpacity: 0.9};
 
-const Post = ({
-  _username,
-  _id,
-  _counterLikes,
-  _statusSaved,
-  _postTitle,
-  _postDesc,
-  _statusLiked,
-  _postImages,
-  _userAvatar,
-}) => {
+const Post = ({item}) => {
   const navigation = useNavigation();
   return (
     <View style={styles.container__post}>
       <View style={styles.header__post}>
         <View style={{flexDirection: 'row'}}>
-          <Image source={_userAvatar} style={styles.img__avatar} />
-          <Text style={styles.txt__avatar}>{_username}</Text>
+          <Image source={item._userAvatar} style={styles.img__avatar} />
+          <Text style={styles.txt__avatar}>{item._username}</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
           <Image source={Images.iconShare} style={styles.img__icon} />
         </View>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate('PostScreen')}>
+      <TouchableOpacity onPress={() => navigation.navigate('PostScreen', item)}>
         <View style={styles.container__imgPost}>
-          <Image source={_postImages[0]} style={styles.img__post} />
+          <Image source={item._postImages[0]} style={styles.img__post} />
         </View>
       </TouchableOpacity>
       <View style={styles.banner__lowerPost}>
@@ -39,25 +29,25 @@ const Post = ({
             source={Images.iconFav}
             style={[
               styles.img__icon,
-              _statusLiked ? {tintColor: Colors.red} : '',
+              item. _statusLiked ? {tintColor: Colors.red} : '',
             ]}
           />
-          <Text style={styles.txt__likes}>{_counterLikes} Likes</Text>
+          <Text style={styles.txt__likes}>{item._counterLikes} Likes</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
           <Image
             source={Images.iconSave}
             style={[
               styles.img__icon,
-              _statusSaved ? {tintColor: Colors.primary} : '',
+              item._statusSaved ? {tintColor: Colors.primary} : '',
             ]}
           />
         </View>
       </View>
       <View style={{flexDirection: 'row', marginTop: 8, marginLeft: 8}}>
         <Text>
-          <Text style={styles.txt__captionTitle}>{_postTitle} </Text>
-          <Text style={styles.txt__caption}> {_postDesc}</Text>
+          <Text style={styles.txt__captionTitle}>{item._postTitle} </Text>
+          <Text style={styles.txt__caption}> {item._postDesc}</Text>
         </Text>
       </View>
     </View>
