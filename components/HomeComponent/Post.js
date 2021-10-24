@@ -29,7 +29,7 @@ const Post = ({item}) => {
             source={Images.iconFav}
             style={[
               styles.img__icon,
-              item. _statusLiked ? {tintColor: Colors.red} : '',
+              item._statusLiked ? {tintColor: Colors.red} : '',
             ]}
           />
           <Text style={styles.txt__likes}>{item._counterLikes} Likes</Text>
