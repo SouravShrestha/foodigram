@@ -1,0 +1,41 @@
+diff --git a/node_modules/@react-navigation/bottom-tabs/lib/commonjs/utils/useIsKeyboardShown.js b/node_modules/@react-navigation/bottom-tabs/lib/commonjs/utils/useIsKeyboardShown.js
+index a51d93b..cec169f 100644
+--- a/node_modules/@react-navigation/bottom-tabs/lib/commonjs/utils/useIsKeyboardShown.js
++++ b/node_modules/@react-navigation/bottom-tabs/lib/commonjs/utils/useIsKeyboardShown.js
+@@ -21,25 +21,23 @@ function useIsKeyboardShown() {
+     const handleKeyboardHide = () => setIsKeyboardShown(false);
+ 
+     if (_reactNative.Platform.OS === 'ios') {
+-      _reactNative.Keyboard.addListener('keyboardWillShow', handleKeyboardShow);
++      this.keyboardWillShow = _reactNative.Keyboard.addListener('keyboardWillShow', handleKeyboardShow);
+ 
+-      _reactNative.Keyboard.addListener('keyboardWillHide', handleKeyboardHide);
++      this.keyboardWillHide = _reactNative.Keyboard.addListener('keyboardWillHide', handleKeyboardHide);
+     } else {
+-      _reactNative.Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
++      this.keyboardWillShow = _reactNative.Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
+ 
+-      _reactNative.Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
++      this.keyboardWillHide = _reactNative.Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
+     }
+ 
+     return () => {
+-      if (_reactNative.Platform.OS === 'ios') {
+-        _reactNative.Keyboard.removeListener('keyboardWillShow', handleKeyboardShow);
+-
+-        _reactNative.Keyboard.removeListener('keyboardWillHide', handleKeyboardHide);
+-      } else {
+-        _reactNative.Keyboard.removeListener('keyboardDidShow', handleKeyboardShow);
+-
+-        _reactNative.Keyboard.removeListener('keyboardDidHide', handleKeyboardHide);
+-      }
++      if (Platform.OS === 'ios') {
++        this.keyboardWillShow?.remove();
++        this.keyboardWillHide?.remove();
++     } else {
++        this.keyboardDidShow?.remove();
++        this.keyboardDidHide?.remove();
++     }
+     };
+   }, []);
+   return isKeyboardShown;

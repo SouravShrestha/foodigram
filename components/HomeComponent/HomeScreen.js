@@ -7,18 +7,18 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import {Colors, Images, Titles} from '../resources/resources';
+import {Colors, Images, Titles} from '../../resources/resources';
 import Story from './Story';
 import Post from './Post';
 
 TouchableOpacity.defaultProps = {activeOpacity: 0.8};
 
 let images = [
-  require('../assets/images/img-1.png'),
-  require('../assets/images/img-2.png'),
-  require('../assets/images/img-3.png'),
-  require('../assets/images/img-4.png'),
-  require('../assets/images/avatar-1.png'),
+  require('../../assets/images/img-1.png'),
+  require('../../assets/images/img-2.png'),
+  require('../../assets/images/img-3.png'),
+  require('../../assets/images/img-4.png'),
+  require('../../assets/images/avatar-1.png'),
 ];
 
 const MY_DATA = [
@@ -169,6 +169,7 @@ const HomeScreen = () => {
                 _postDesc={item._postDesc}
                 _statusLiked={item._statusLiked}
                 _statusSaved={item._statusSaved}
+                _id={item._id}
               />
             ) : index == 0 ? (
               <StoriesView />

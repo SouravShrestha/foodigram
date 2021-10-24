@@ -1,15 +1,22 @@
-import React from 'react';
-import {Animated, Dimensions, Image, StyleSheet, StatusBar} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  Animated,
+  Dimensions,
+  Image,
+  StyleSheet,
+  StatusBar,
+  BackHandler,
+} from 'react-native';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRef} from 'react';
-import HomeScreen from './HomeScreen';
-import SearchScreen from './SearchSreen';
-import {Images, Colors} from '../resources/resources';
-import ProfileScreen from './ProfileScreen';
-import AddScreen from './AddScreen';
-import ExploreScreen from './ExploreScreen';
+import SearchScreen from '../SearchComponent/SearchScreen';
+import {Images, Colors} from '../../resources/resources';
+import ProfileScreen from '../ProfileComponent/ProfileScreen';
+import AddScreen from '../AddComponent/AddScreen';
+import ExploreScreen from '../ExploreComponent/ExploreScreen';
+import HomeScreenNavigator from '../HomeComponent/HomeScreenNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,7 +26,7 @@ export default function NavigationScreen() {
     {
       id: 1,
       _name: 'Home',
-      _component: HomeScreen,
+      _component: HomeScreenNavigator,
       _image: Images.iconHome,
       _tintColor: Colors.black,
       _style: styles.img__tab,
@@ -62,6 +69,7 @@ export default function NavigationScreen() {
       _toValue: getWidth() * 4,
     },
   ];
+  
   const tabs = tabs_data.map(item => {
     return (
       <Tab.Screen
@@ -82,15 +90,16 @@ export default function NavigationScreen() {
           ),
         }}
         listeners={() => ({
-          tabPress: e => {
+          state: () => {
             Animated.spring(tabOffsetValue, {
               toValue: item._toValue,
               useNativeDriver: true,
             }).start();
-          },
+          }
         })}></Tab.Screen>
     );
   });
+
   return (
     <NavigationContainer>
       <StatusBar backgroundColor={Colors.light} barStyle="dark-content" />
@@ -98,10 +107,11 @@ export default function NavigationScreen() {
         tabBarOptions={{
           showLabel: false,
           style: styles.nav__navigator,
-        }}>
+        }}
+        backBehavior='history'
+        >
         {tabs}
       </Tab.Navigator>
-
       <Animated.View
         style={{
           width: getWidth() - 28,

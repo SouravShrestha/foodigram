@@ -1,8 +1,6 @@
 import React from 'react';
-import {Text, View, StyleSheet } from 'react-native';
-import WelcomeScreen from './components/WelcomeScreen';
-import NavigationScreen from './components/NavigationScreen';
-import HomeScreen from './components/HomeScreen';
+import {Text, View, StyleSheet} from 'react-native';
+import NavigationScreen from './components/WelcomeComponent/NavigationScreen';
 
 const App = () => {
   return (
@@ -14,7 +12,7 @@ const App = () => {
 
 const styles = StyleSheet.create({
   back__container: {
-    flex: 1
+    flex: 1,
   },
 });
 

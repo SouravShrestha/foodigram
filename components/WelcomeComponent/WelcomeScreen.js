@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   StatusBar
 } from 'react-native';
-import {Colors, Images, Titles } from '../resources/resources';
+import {Colors, Images, Titles } from '../../resources/resources';
 
 TouchableOpacity.defaultProps = {activeOpacity: 0.8};
 

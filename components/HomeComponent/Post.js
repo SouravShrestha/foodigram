@@ -1,8 +1,9 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import {Colors, Images} from '../resources/resources';
+import {Colors, Images} from '../../resources/resources';
+import { useNavigation } from '@react-navigation/native';
 
-TouchableOpacity.defaultProps = {activeOpacity: 0.8};
+TouchableOpacity.defaultProps = {activeOpacity: 0.9};
 
 const Post = ({
   _username,
@@ -15,6 +16,7 @@ const Post = ({
   _postImages,
   _userAvatar,
 }) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container__post}>
       <View style={styles.header__post}>
@@ -26,19 +28,30 @@ const Post = ({
           <Image source={Images.iconShare} style={styles.img__icon} />
         </View>
       </View>
-      <View style={styles.container__imgPost}>
-        <Image source={_postImages[0]} style={styles.img__post} />
-      </View>
+      <TouchableOpacity onPress={() => navigation.navigate('Post')}>
+        <View style={styles.container__imgPost}>
+          <Image source={_postImages[0]} style={styles.img__post} />
+        </View>
+      </TouchableOpacity>
       <View style={styles.banner__lowerPost}>
         <View style={{flexDirection: 'row'}}>
           <Image
             source={Images.iconFav}
-            style={[styles.img__icon, _statusLiked ? {tintColor: Colors.red} : '']}
+            style={[
+              styles.img__icon,
+              _statusLiked ? {tintColor: Colors.red} : '',
+            ]}
           />
           <Text style={styles.txt__likes}>{_counterLikes} Likes</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
-          <Image source={Images.iconSave} style={[styles.img__icon, _statusSaved ? {tintColor: Colors.primary} : '']} />
+          <Image
+            source={Images.iconSave}
+            style={[
+              styles.img__icon,
+              _statusSaved ? {tintColor: Colors.primary} : '',
+            ]}
+          />
         </View>
       </View>
       <View style={{flexDirection: 'row', marginTop: 8, marginLeft: 8}}>
@@ -97,7 +110,7 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     letterSpacing: -0.5,
     marginLeft: 10,
-    lineHeight: 24
+    lineHeight: 24,
   },
   txt__caption: {
     fontSize: 14,
@@ -105,7 +118,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SFPro-Regular',
     lineHeight: 30,
     letterSpacing: -0.6,
-    lineHeight: 24
+    lineHeight: 24,
   },
   img__post: {
     height: '100%',
