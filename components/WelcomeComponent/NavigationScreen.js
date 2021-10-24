@@ -69,7 +69,7 @@ export default function NavigationScreen() {
       _toValue: getWidth() * 4,
     },
   ];
-  
+
   const tabs = tabs_data.map(item => {
     return (
       <Tab.Screen
@@ -95,7 +95,7 @@ export default function NavigationScreen() {
               toValue: item._toValue,
               useNativeDriver: true,
             }).start();
-          }
+          },
         })}></Tab.Screen>
     );
   });
@@ -108,8 +108,7 @@ export default function NavigationScreen() {
           showLabel: false,
           style: styles.nav__navigator,
         }}
-        backBehavior='history'
-        >
+        backBehavior="history">
         {tabs}
       </Tab.Navigator>
       <Animated.View
