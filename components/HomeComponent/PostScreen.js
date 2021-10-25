@@ -188,6 +188,7 @@ const PostScreen = ({route, navigation}) => {
               <Text style={styles.txt__media}>Audio</Text>
             </View>
           </View>
+          {/* Media Panel */}
           <Animated.View
             style={[
               {

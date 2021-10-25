@@ -135,14 +135,13 @@ const StoriesView = () => (
 const EmptyView = () => <View style={{height: 100}}></View>;
 
 const HomeScreen = () => {
-  //Scoll to top --> callled on clicking app name in titlebar
+  // Scoll to top --> callled on clicking app name in titlebar
   const flatlistRef = useRef();
   const ScrollToTop = () => {
     flatlistRef.current.scrollToIndex({index: 0});
   };
 
-  
-  //Home screen view
+  // Home screen view
   return (
     <View style={styles.back__container}>
       <View style={styles.panel__appBar}>
