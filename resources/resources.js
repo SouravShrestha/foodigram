@@ -33,6 +33,8 @@ export const Images = {
     iconTimer: require('../assets/images/icon-timer.png'),
     iconServe: require('../assets/images/icon-serve.png'),
     iconBurn: require('../assets/images/icon-burn.png'),
+    iconOkay: require('../assets/images/icon-okay.png'),
+    iconCross: require('../assets/images/icon-cross.png'),
     iconAvatar: require('../assets/images/avatar.png'),
     img1: require('../assets/images/img-1.png'),
     img2: require('../assets/images/img-2.png'),

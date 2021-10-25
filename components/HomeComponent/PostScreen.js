@@ -1,5 +1,13 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image, FlatList} from 'react-native';
+import React, {useState, useRef} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  Animated,
+} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Colors, Images, Titles} from '../../resources/resources';
 
@@ -37,8 +45,68 @@ const STEPS = [
   'Pour on enough salad dressing or vinegar to coat, toss again and serve.',
 ];
 
+const AllSteps = STEPS.map((item, index) => {
+  const _styles = StyleSheet.create({
+    text_stepNo: {
+      fontSize: 16,
+      color: Colors.stepNo,
+      fontFamily: 'SFPro-Bold',
+    },
+    text_step: {
+      fontSize: 16,
+      color: Colors.black,
+      fontFamily: 'SFPro-Regular',
+      marginTop: 10,
+      letterSpacing: -0.1,
+      marginBottom: 20,
+    },
+  });
+  return (
+    <View key={index}>
+      <Text style={_styles.text_stepNo}>Step {index + 1}</Text>
+      <Text style={_styles.text_step}>{item}</Text>
+    </View>
+  );
+});
+
+const IngredientView = ({name, quantity, color}) => (
+  <View style={styles.container__ingredient}>
+    <View style={styles.panel_ingredientImage(color)}></View>
+    <Text style={styles.txt_ingredientName}>{name}</Text>
+    <Text style={styles.txt_ingredientQuantity}>{quantity} items</Text>
+  </View>
+);
+
+const EmptyView = () => <View style={{height: 90}}></View>;
+
 const PostScreen = ({route, navigation}) => {
   const item = route.params;
+
+  const height = useState(new Animated.Value(0))[0];
+
+  function showMedia() {
+    // Animated.timing(height, {
+    //   toValue: 1,
+    //   duration: 1000,
+    //   useNativeDriver: false,
+    // }).start(() => setMediaVisibility(true));
+    setMediaVisibility(true);
+  }
+
+  function hideMedia() {
+    // Animated.timing(height, {
+    //   toValue: 0,
+    //   duration: 1000,
+    //   useNativeDriver: false,
+    // }).start(() => setMediaVisibility(false));
+    setMediaVisibility(false);
+  }
+
+  const [isMediaVisible, setMediaVisibility] = useState(false);
+
+  const toggleMediaVisibility = () => {
+    isMediaVisible ? hideMedia() : showMedia();
+  };
 
   return (
     <View style={styles.panel__back}>
@@ -100,6 +168,37 @@ const PostScreen = ({route, navigation}) => {
             </View>
             <View style={styles.container__backRecipeDetails}></View>
           </View>
+          <View style={styles.panel__media}>
+            <TouchableOpacity
+              style={styles.container__media}
+              onPress={toggleMediaVisibility}>
+              <Image source={Images.iconOkay} style={styles.img__action} />
+              <Text style={styles.txt__media}>Pictures</Text>
+            </TouchableOpacity>
+            <View style={[styles.container__media, styles.inactive__media]}>
+              <Image source={Images.iconCross} style={styles.img__action} />
+              <Text style={styles.txt__media}>Video</Text>
+            </View>
+            <View style={[styles.container__media, styles.inactive__media]}>
+              <Image source={Images.iconCross} style={styles.img__action} />
+              <Text style={styles.txt__media}>Audio</Text>
+            </View>
+          </View>
+          {isMediaVisible && (
+            <Animated.View
+              style={[
+                {
+                  width: '100%',
+                  marginTop: 25,
+                  alignItems: 'center',
+                },
+              ]}>
+              <Image
+                source={item._postImages[0]}
+                style={styles.img__mediaImage}
+              />
+            </Animated.View>
+          )}
           <View style={styles.panel__ingredients}>
             <Text style={styles.txt__sectionTitle}>Ingredients</Text>
             <View style={styles.panel__allIngredients}>
@@ -129,40 +228,6 @@ const PostScreen = ({route, navigation}) => {
     </View>
   );
 };
-
-const AllSteps = STEPS.map((item, index) => {
-  const _styles = StyleSheet.create({
-    text_stepNo: {
-      fontSize: 16,
-      color: Colors.stepNo,
-      fontFamily: 'SFPro-Bold',
-    },
-    text_step: {
-      fontSize: 16,
-      color: Colors.black,
-      fontFamily: 'SFPro-Regular',
-      marginTop: 10,
-      letterSpacing: -0.1,
-      marginBottom: 20,
-    },
-  });
-  return (
-    <View key={index}>
-      <Text style={_styles.text_stepNo}>Step {index + 1}</Text>
-      <Text style={_styles.text_step}>{item}</Text>
-    </View>
-  );
-});
-
-const IngredientView = ({name, quantity, color}) => (
-  <View style={styles.container__ingredient}>
-    <View style={styles.panel_ingredientImage(color)}></View>
-    <Text style={styles.txt_ingredientName}>{name}</Text>
-    <Text style={styles.txt_ingredientQuantity}>{quantity} items</Text>
-  </View>
-);
-
-const EmptyView = () => <View style={{height: 110}}></View>;
 
 const styles = StyleSheet.create({
   panel__back: {
@@ -283,6 +348,45 @@ const styles = StyleSheet.create({
     width: '90%',
     marginTop: 25,
   },
+
+  panel__media: {
+    width: '100%',
+    marginTop: 35,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  container__media: {
+    backgroundColor: Colors.white,
+    borderRadius: 8,
+    flexDirection: 'row',
+    height: 30,
+    paddingHorizontal: 15,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    elevation: 10.5,
+    borderTopColor: '#eee',
+    shadowColor: '#999',
+  },
+  img__action: {
+    height: 15,
+    width: 15,
+    aspectRatio: 1,
+  },
+  txt__media: {
+    marginLeft: 10,
+    fontSize: 14,
+    color: Colors.black,
+    fontFamily: 'SFPro-Medium',
+  },
+  inactive__media: {
+    opacity: 0.7,
+  },
+  img__mediaImage: {
+    height: 350,
+    width: 350,
+    borderRadius: 8,
+  },
+
   panel__allIngredients: {
     paddingVertical: 18,
   },
@@ -332,7 +436,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: Colors.instructionBack,
     borderRadius: 15,
-    padding: 20,
+    paddingTop: 20,
+    paddingHorizontal: 20,
   },
   container__postDesc: {
     height: '100%',
