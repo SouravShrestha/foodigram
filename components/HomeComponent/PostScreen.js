@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -82,30 +82,34 @@ const EmptyView = () => <View style={{height: 90}}></View>;
 const PostScreen = ({route, navigation}) => {
   const item = route.params;
 
-  const height = useState(new Animated.Value(0))[0];
+  let _showMedia = true;
+
+  const state = {height: new Animated.Value(0)};
+
+  const maxHeight = state.height.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 400],
+  });
 
   function showMedia() {
-    // Animated.timing(height, {
-    //   toValue: 1,
-    //   duration: 1000,
-    //   useNativeDriver: false,
-    // }).start(() => setMediaVisibility(true));
-    setMediaVisibility(true);
+    Animated.timing(state.height, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
   }
 
   function hideMedia() {
-    // Animated.timing(height, {
-    //   toValue: 0,
-    //   duration: 1000,
-    //   useNativeDriver: false,
-    // }).start(() => setMediaVisibility(false));
-    setMediaVisibility(false);
+    Animated.timing(state.height, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
   }
 
-  const [isMediaVisible, setMediaVisibility] = useState(false);
-
   const toggleMediaVisibility = () => {
-    isMediaVisible ? hideMedia() : showMedia();
+    _showMedia ? showMedia() : hideMedia();
+    _showMedia = !_showMedia;
   };
 
   return (
@@ -184,21 +188,20 @@ const PostScreen = ({route, navigation}) => {
               <Text style={styles.txt__media}>Audio</Text>
             </View>
           </View>
-          {isMediaVisible && (
-            <Animated.View
-              style={[
-                {
-                  width: '100%',
-                  marginTop: 25,
-                  alignItems: 'center',
-                },
-              ]}>
-              <Image
-                source={item._postImages[0]}
-                style={styles.img__mediaImage}
-              />
-            </Animated.View>
-          )}
+          <Animated.View
+            style={[
+              {
+                width: '100%',
+                marginTop: 25,
+                alignItems: 'center',
+                maxHeight: maxHeight,
+              },
+            ]}>
+            <Image
+              source={item._postImages[0]}
+              style={styles.img__mediaImage}
+            />
+          </Animated.View>
           <View style={styles.panel__ingredients}>
             <Text style={styles.txt__sectionTitle}>Ingredients</Text>
             <View style={styles.panel__allIngredients}>
@@ -382,8 +385,8 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   img__mediaImage: {
-    height: 350,
-    width: 350,
+    height: '93%',
+    width: 400,
     borderRadius: 8,
   },
 
@@ -393,7 +396,6 @@ const styles = StyleSheet.create({
   panel__ingredients: {
     width: '100%',
     height: 175,
-    marginTop: 25,
     paddingHorizontal: 15,
     paddingVertical: 5,
   },
