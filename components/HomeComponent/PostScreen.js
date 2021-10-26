@@ -77,7 +77,12 @@ const HEADER_MAX_HEIGHT = IMAGE_APPHEADER_HEIGHT;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-const AppHeader = ({opacity, reverseOpacity}) => {
+const AppHeader = ({opacity, reverseOpacity, navigation}) => {
+  
+  function GoBack() {
+    navigation.navigate('HomeScreen');
+  }
+
   return (
     <View>
       <View style={styles.container__appHeader}>
@@ -87,16 +92,18 @@ const AppHeader = ({opacity, reverseOpacity}) => {
             {
               opacity: reverseOpacity,
             },
-          ]}></Animated.View>
-        <View
+          ]}
+          onPress={() => GoBack()}></Animated.View>
+        <TouchableOpacity
           style={[
             {
               padding: 8,
               borderRadius: 10,
             },
-          ]}>
+          ]}
+          onPress={() => GoBack()}>
           <Image source={Images.iconBack} style={styles.img__appbar} />
-        </View>
+        </TouchableOpacity>
         <Animated.View
           style={[
             styles.dummy_backSetting,
@@ -244,6 +251,7 @@ const PostScreen = ({route, navigation}) => {
       useNativeDriver: false,
     }).start();
   }
+
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const toggleMediaVisibility = () => {
@@ -253,7 +261,11 @@ const PostScreen = ({route, navigation}) => {
 
   return (
     <View style={styles.panel__back}>
-      <AppHeader opacity={_opacity} reverseOpacity={_reverseOpacity} />
+      <AppHeader
+        opacity={_opacity}
+        reverseOpacity={_reverseOpacity}
+        navigation={navigation}
+      />
       <ScrollView
         style={{flex: 1}}
         showsVerticalScrollIndicator={false}
