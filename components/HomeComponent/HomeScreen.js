@@ -77,7 +77,16 @@ const POST_DATA = [
     _postDesc:
       'Doloribus error blanditiis dolorem incidunt sed vero. Consequatur officia nemo ipsa harum architecto non cupiditate sed rerum.',
     _statusLiked: false,
-    _postImages: [Images.img1, Images.img2],
+    _postImages: [
+      {
+        id: 1,
+        src: Images.img1,
+      },
+      {
+        id: 2,
+        src: Images.img2,
+      },
+    ],
     _userAvatar: Images.person3,
   },
   {
@@ -89,7 +98,12 @@ const POST_DATA = [
     _postDesc:
       'Doloribus error blanditiis dolorem incidunt sed vero. Consequatur officia nemo ipsa harum architecto non cupiditate sed rerum.',
     _statusLiked: true,
-    _postImages: [Images.img2, Images.img4, , Images.img1],
+    _postImages: [
+      {
+        id: 1,
+        src: Images.img3,
+      },
+    ],
     _userAvatar: Images.person2,
   },
   {
@@ -101,7 +115,20 @@ const POST_DATA = [
     _postDesc:
       'Doloribus error blanditiis dolorem incidunt sed vero. Consequatur officia nemo ipsa harum architecto non cupiditate sed rerum.',
     _statusLiked: true,
-    _postImages: [Images.img3, Images.img1],
+    _postImages: [
+      {
+        id: 1,
+        src: Images.img1,
+      },
+      {
+        id: 2,
+        src: Images.img4,
+      },
+      {
+        id: 3,
+        src: Images.img1,
+      },
+    ],
     _userAvatar: Images.person4,
   },
   {
@@ -113,7 +140,16 @@ const POST_DATA = [
     _postDesc:
       'Doloribus error blanditiis dolorem incidunt sed vero. Consequatur officia nemo ipsa harum architecto non cupiditate sed rerum.',
     _statusLiked: true,
-    _postImages: [Images.img4],
+    _postImages: [
+      {
+        id: 1,
+        src: Images.img3,
+      },
+      {
+        id: 2,
+        src: Images.img2,
+      },
+    ],
     _userAvatar: Images.person1,
   },
   {},

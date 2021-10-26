@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Animated,
   Dimensions,
+  useWindowDimensions,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useState} from 'react/cjs/react.development';
@@ -83,6 +84,32 @@ const IngredientView = ({name, quantity, color}) => (
 
 const EmptyView = () => <View style={{height: 90}}></View>;
 
+const Paginator = ({_images, _scrollX}) => {
+  const {width} = useWindowDimensions();
+  return (
+    <View style={styles.container__paginator}>
+      {_images.map((_, i) => {
+        const inputRange = [(i - 1) * width, i * width, (i + 1) * width];
+        const dotWidth = _scrollX.interpolate({
+          inputRange,
+          outputRange: [9, 20, 9],
+          extrapolate: 'clamp',
+        });
+        const opacity = _scrollX.interpolate({
+          inputRange,
+          outputRange: [0.5, 1, 0.5],
+          extrapolate: 'clamp',
+        });
+        return (
+          <Animated.View
+            style={[styles.dot, {width: dotWidth, opacity}]}
+            key={i.toString()}></Animated.View>
+        );
+      })}
+    </View>
+  );
+};
+
 const PostScreen = ({route, navigation}) => {
   const item = route.params;
 
@@ -94,20 +121,6 @@ const PostScreen = ({route, navigation}) => {
     inputRange: [0, 1],
     outputRange: [0, 375],
   });
-
-  const [imgActive, setImageActive] = useState(0);
-
-  function onSlidechange(nativeEvent) {
-    console.log(nativeEvent);
-    if (nativeEvent) {
-      const slide = Math.ceil(
-        nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width,
-      );
-      if (slide != imgActive) {
-        setImageActive(slide);
-      }
-    }
-  }
 
   function showMedia() {
     Animated.timing(state.height, {
@@ -124,30 +137,32 @@ const PostScreen = ({route, navigation}) => {
       useNativeDriver: false,
     }).start();
   }
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const viewConf = useRef({viewAreaCoveragePercentThreshold: 50}).current;
+  const slideRef = useRef(null);
 
   const ImageSlider = ({images}) => {
     return (
       <View>
-        <ScrollView
-          onScroll={({nativeEvent}) => onSlidechange(nativeEvent)}
+        <FlatList
+          data={images}
           pagingEnabled
           showsHorizontalScrollIndicator={false}
           horizontal
-          style={styles.panel__slider}>
-          {images.map((e, index) => (
-            <Image key={index} source={e} style={styles.img__mediaImage} />
-          ))}
-        </ScrollView>
-        <View style={styles.panel__indicator}>
-          {images.map((e, index) => (
-            <View
-              key={index}
-              style={[
-                styles.dot__indicator,
-                imgActive == index ? styles.dotActive : styles.dotInactive,
-              ]}></View>
-          ))}
-        </View>
+          keyExtractor={item => item.id}
+          style={styles.panel__slider}
+          renderItem={({item}) => (
+            <Image source={item.src} style={styles.img__mediaImage} />
+          )}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {x: scrollX}}}],
+            {useNativeDriver: false},
+          )}
+          viewabilityConfig={viewConf}
+          scrollEventThrottle={32}
+          ref={slideRef}
+        />
+        <Paginator _images={images} _scrollX={scrollX} />
       </View>
     );
   };
@@ -161,7 +176,7 @@ const PostScreen = ({route, navigation}) => {
     <View style={styles.panel__back}>
       <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
         <View style={styles.container__images}>
-          <Image source={item._postImages[0]} style={styles.img__post} />
+          <Image source={item._postImages[0].src} style={styles.img__post} />
         </View>
         <View style={styles.container__contents}>
           <View style={styles.container__postDetails}>
@@ -387,6 +402,26 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
 
+  panel__slider:{
+    
+  },
+  dot: {
+    height: '15%',
+    borderRadius: 5,
+    backgroundColor: Colors.white,
+    marginHorizontal: 5,
+  },
+  container__paginator: {
+    flexDirection: 'row',
+    position: 'absolute',
+    bottom: '6%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '15%',
+    right: 7.5
+  },
+
   panel__media: {
     width: '100%',
     marginTop: 35,
@@ -427,36 +462,14 @@ const styles = StyleSheet.create({
     maxHeight: maxHeight,
     paddingLeft: 15,
   }),
-  panel__slider: {
-    height: '93%',
-  },
+  
   img__mediaImage: {
     height: 350,
     width: WIDTH - 30,
     borderRadius: 8,
     marginRight: 15,
   },
-  panel__indicator: {
-    position: 'absolute',
-    bottom: 25,
-    width: '100%',
-    height: '10%',
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  dotActive: {
-    backgroundColor: Colors.primary,
-  },
-  dotInactive: {
-    backgroundColor: Colors.inactiveIcon,
-  },
-  dot__indicator: {
-    height: '18%',
-    width: 7,
-    marginHorizontal: 4,
-    borderRadius: 5,
-  },
+  
 
   panel__allIngredients: {
     paddingVertical: 18,

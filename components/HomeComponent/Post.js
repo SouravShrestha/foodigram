@@ -20,7 +20,7 @@ const Post = ({item}) => {
       </View>
       <TouchableOpacity onPress={() => navigation.navigate('PostScreen', item)}>
         <View style={styles.container__imgPost}>
-          <Image source={item._postImages[0]} style={styles.img__post} />
+          <Image source={item._postImages[0].src} style={styles.img__post} />
         </View>
       </TouchableOpacity>
       <View style={styles.banner__lowerPost}>
