@@ -11,11 +11,8 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useState} from 'react/cjs/react.development';
-import {Colors, Images, Titles} from '../../resources/resources';
+import {Colors, Images} from '../../resources/resources';
 
-const WIDTH = Dimensions.get('window').width;
-const HEIGHT = Dimensions.get('window').height;
 const INGREDIENTS = [
   {
     name: 'Tomato',
@@ -74,6 +71,76 @@ const AllSteps = STEPS.map((item, index) => {
   );
 });
 
+const WIDTH = Dimensions.get('window').width;
+const IMAGE_APPHEADER_HEIGHT = 300;
+const HEADER_MAX_HEIGHT = IMAGE_APPHEADER_HEIGHT;
+const HEADER_MIN_HEIGHT = 60;
+const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
+
+const AppHeader = ({opacity, reverseOpacity}) => {
+  return (
+    <View>
+      <View style={styles.container__appHeader}>
+        <Animated.View
+          style={[
+            styles.dummy_backApp,
+            {
+              opacity: reverseOpacity,
+            },
+          ]}></Animated.View>
+        <View
+          style={[
+            {
+              padding: 8,
+              borderRadius: 10,
+            },
+          ]}>
+          <Image source={Images.iconBack} style={styles.img__appbar} />
+        </View>
+        <Animated.View
+          style={[
+            styles.dummy_backSetting,
+            {
+              opacity: reverseOpacity,
+            },
+          ]}></Animated.View>
+        <View
+          style={{
+            flexDirection: 'row',
+            padding: 8,
+            borderRadius: 10,
+          }}>
+          <Image
+            source={Images.iconSaveOutline}
+            style={[
+              styles.img__appbar,
+              {
+                marginHorizontal: 8,
+              },
+            ]}
+          />
+          <Image
+            source={Images.iconShare}
+            style={[
+              styles.img__appbar,
+              {
+                marginHorizontal: 8,
+              },
+            ]}
+          />
+        </View>
+      </View>
+      <Animated.View
+        style={[
+          styles.panel__appbarDummy,
+          {
+            opacity: opacity,
+          },
+        ]}></Animated.View>
+    </View>
+  );
+};
+
 const IngredientView = ({name, quantity, color}) => (
   <View style={styles.container__ingredient}>
     <View style={styles.panel_ingredientImage(color)}></View>
@@ -110,16 +177,56 @@ const Paginator = ({_images, _scrollX}) => {
   );
 };
 
+const ImageSlider = ({images, scrollX}) => {
+  const viewConf = useRef({viewAreaCoveragePercentThreshold: 50}).current;
+  const slideRef = useRef(null);
+  return (
+    <View>
+      <FlatList
+        data={images}
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        horizontal
+        keyExtractor={item => item.id}
+        style={styles.panel__slider}
+        renderItem={({item}) => (
+          <Image source={item.src} style={styles.img__mediaImage} />
+        )}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {x: scrollX}}}],
+          {useNativeDriver: false},
+        )}
+        viewabilityConfig={viewConf}
+        scrollEventThrottle={32}
+        ref={slideRef}
+      />
+      <Paginator _images={images} _scrollX={scrollX} />
+    </View>
+  );
+};
+
 const PostScreen = ({route, navigation}) => {
   const item = route.params;
 
   let _showMedia = true;
 
-  const state = {height: new Animated.Value(0)};
+  const state = {height: new Animated.Value(0), scrollY: new Animated.Value(0)};
 
   const maxHeight = state.height.interpolate({
     inputRange: [0, 1],
     outputRange: [0, 375],
+  });
+
+  const _opacity = state.scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [0, 1],
+    extrapolate: 'clamp',
+  });
+
+  const _reverseOpacity = state.scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [0.3, 0],
+    extrapolate: 'clamp',
   });
 
   function showMedia() {
@@ -138,34 +245,6 @@ const PostScreen = ({route, navigation}) => {
     }).start();
   }
   const scrollX = useRef(new Animated.Value(0)).current;
-  const viewConf = useRef({viewAreaCoveragePercentThreshold: 50}).current;
-  const slideRef = useRef(null);
-
-  const ImageSlider = ({images}) => {
-    return (
-      <View>
-        <FlatList
-          data={images}
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          horizontal
-          keyExtractor={item => item.id}
-          style={styles.panel__slider}
-          renderItem={({item}) => (
-            <Image source={item.src} style={styles.img__mediaImage} />
-          )}
-          onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {x: scrollX}}}],
-            {useNativeDriver: false},
-          )}
-          viewabilityConfig={viewConf}
-          scrollEventThrottle={32}
-          ref={slideRef}
-        />
-        <Paginator _images={images} _scrollX={scrollX} />
-      </View>
-    );
-  };
 
   const toggleMediaVisibility = () => {
     _showMedia ? showMedia() : hideMedia();
@@ -174,7 +253,15 @@ const PostScreen = ({route, navigation}) => {
 
   return (
     <View style={styles.panel__back}>
-      <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+      <AppHeader opacity={_opacity} reverseOpacity={_reverseOpacity} />
+      <ScrollView
+        style={{flex: 1}}
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {y: state.scrollY}}}],
+          {useNativeDriver: false},
+        )}>
         <View style={styles.container__images}>
           <Image source={item._postImages[0].src} style={styles.img__post} />
         </View>
@@ -250,7 +337,7 @@ const PostScreen = ({route, navigation}) => {
           </View>
           {/* Media Panel */}
           <Animated.View style={styles.panel__mediaConent(maxHeight)}>
-            <ImageSlider images={item._postImages} />
+            <ImageSlider images={item._postImages} scrollX={scrollX} />
           </Animated.View>
           <View style={styles.panel__ingredients}>
             <Text style={styles.txt__sectionTitle}>Ingredients</Text>
@@ -287,8 +374,56 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.white,
   },
+
+  container__appHeader: {
+    height: 70,
+    width: WIDTH,
+    paddingHorizontal: 15,
+    position: 'absolute',
+    zIndex: 2,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  panel__appbarDummy: {
+    height: 70,
+    width: WIDTH,
+    paddingHorizontal: 15,
+    position: 'absolute',
+    zIndex: 1,
+    alignItems: 'center',
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  dummy_backApp: {
+    padding: 8,
+    borderRadius: 10,
+    backgroundColor: Colors.white,
+    position: 'absolute',
+    height: 40,
+    width: 40,
+    left: 15,
+  },
+  dummy_backSetting: {
+    padding: 8,
+    borderRadius: 10,
+    backgroundColor: Colors.white,
+    position: 'absolute',
+    height: 40,
+    width: 96,
+    right: 15,
+  },
+
+  img__appbar: {
+    height: 25,
+    width: 25,
+    tintColor: '#222',
+  },
+
   container__images: {
-    height: 350,
+    height: 275,
     width: '100%',
   },
   txt__likes: {
@@ -308,8 +443,8 @@ const styles = StyleSheet.create({
   img__post: {
     height: '100%',
     width: '100%',
-    borderBottomLeftRadius: 50,
-    borderBottomRightRadius: 50,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
   },
   img__icon: {
     height: 30,
@@ -402,9 +537,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
 
-  panel__slider:{
-    
-  },
+  panel__slider: {},
   dot: {
     height: '15%',
     borderRadius: 5,
@@ -419,7 +552,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '15%',
-    right: 7.5
+    right: 7.5,
   },
 
   panel__media: {
@@ -462,14 +595,13 @@ const styles = StyleSheet.create({
     maxHeight: maxHeight,
     paddingLeft: 15,
   }),
-  
+
   img__mediaImage: {
     height: 350,
     width: WIDTH - 30,
     borderRadius: 8,
     marginRight: 15,
   },
-  
 
   panel__allIngredients: {
     paddingVertical: 18,
