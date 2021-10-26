@@ -72,7 +72,7 @@ const POST_DATA = [
     _username: 'sam_amir',
     _id: 1,
     _counterLikes: 121,
-    _statusSaved: true,
+    _statusSaved: false,
     _postTitle: 'Green Salad',
     _postDesc:
       'Doloribus error blanditiis dolorem incidunt sed vero. Consequatur officia nemo ipsa harum architecto non cupiditate sed rerum.',
@@ -88,6 +88,8 @@ const POST_DATA = [
       },
     ],
     _userAvatar: Images.person3,
+    _ratings: 4.8,
+    _peopleRated: 140
   },
   {
     _username: 'billy_09',
@@ -105,6 +107,8 @@ const POST_DATA = [
       },
     ],
     _userAvatar: Images.person2,
+    _ratings: 4.0,
+    _peopleRated: 65
   },
   {
     _username: 'liligo_09',
@@ -130,6 +134,8 @@ const POST_DATA = [
       },
     ],
     _userAvatar: Images.person4,
+    _ratings: 3.6,
+    _peopleRated: 4
   },
   {
     _username: 'emmapant87',
@@ -151,6 +157,8 @@ const POST_DATA = [
       },
     ],
     _userAvatar: Images.person1,
+    _ratings: 2.8,
+    _peopleRated: 23
   },
   {},
 ];
@@ -159,6 +167,7 @@ const StoriesView = () => (
   <View style={styles.panel__stories}>
     <FlatList
       data={MY_DATA}
+      showsHorizontalScrollIndicator={false}
       renderItem={({item}) => (
         <Story _image={item.image} _color={item.color} _name={item.name} />
       )}
@@ -198,6 +207,7 @@ const HomeScreen = () => {
         <FlatList
           ref={flatlistRef}
           data={POST_DATA}
+          showsVerticalScrollIndicator={false}
           renderItem={({item, index}) =>
             index > 0 && index != POST_DATA.length - 1 ? (
               <Post item={item} />

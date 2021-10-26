@@ -78,7 +78,6 @@ const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 const AppHeader = ({opacity, reverseOpacity, navigation}) => {
-  
   function GoBack() {
     navigation.navigate('HomeScreen');
   }
@@ -118,7 +117,7 @@ const AppHeader = ({opacity, reverseOpacity, navigation}) => {
             borderRadius: 10,
           }}>
           <Image
-            source={Images.iconSaveOutline}
+            source={Images.iconSaveOutlineWide}
             style={[
               styles.img__appbar,
               {
@@ -156,7 +155,7 @@ const IngredientView = ({name, quantity, color}) => (
   </View>
 );
 
-const EmptyView = () => <View style={{height: 90}}></View>;
+const EmptyView = () => <View style={{height: 125}}></View>;
 
 const Paginator = ({_images, _scrollX}) => {
   const {width} = useWindowDimensions();
@@ -208,6 +207,96 @@ const ImageSlider = ({images, scrollX}) => {
         ref={slideRef}
       />
       <Paginator _images={images} _scrollX={scrollX} />
+    </View>
+  );
+};
+
+const RatingView = ({item}) => {
+  return (
+    <View
+      style={{
+        width: '100%',
+        paddingHorizontal: 15,
+        alignItems: 'center',
+        marginTop: 10,
+      }}>
+      <Text style={styles.txt__sectionTitle}>Rate the recipe</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          marginTop: 20,
+          justifyContent: 'space-around',
+          width: '100%',
+        }}>
+        <View style={{flexDirection: 'row'}}>
+          <Image
+            source={Images.iconStar}
+            style={[styles.img__icon, {marginLeft: 10}]}
+          />
+          <Text
+            style={[
+              styles.txt__likes,
+              {
+                marginLeft: 4,
+              },
+            ]}>
+            {item._ratings}{' '}
+            <Text
+              style={{
+                color: Colors.secondaryText,
+                fontFamily: 'SFPro-Regular',
+                fontSize: 13,
+              }}>
+              ({item._peopleRated})
+            </Text>
+          </Text>
+        </View>
+
+        <View style={{flexDirection: 'row'}}>
+          <Image
+            source={Images.iconStar}
+            style={[styles.img__icon, {marginLeft: 10}]}
+          />
+          <Image
+            source={Images.iconStar}
+            style={[styles.img__icon, {marginLeft: 10}]}
+          />
+          <Image
+            source={Images.iconStar}
+            style={[styles.img__icon, {marginLeft: 10}]}
+          />
+          <Image
+            source={Images.iconStar}
+            style={[
+              styles.img__icon,
+              {marginLeft: 10, tintColor: Colors.inactiveIcon},
+            ]}
+          />
+          <Image
+            source={Images.iconStar}
+            style={[
+              styles.img__icon,
+              {marginLeft: 10, tintColor: Colors.inactiveIcon},
+            ]}
+          />
+        </View>
+      </View>
+    </View>
+  );
+};
+
+const CommentsView = () => {
+  return (
+    <View
+      style={{
+        height: 300,
+        width: '100%',
+        backgroundColor: 'lightblue',
+        marginTop: 25,
+        paddingHorizontal: 10,
+        paddingVertical: 15
+      }}>
+      <Text style={styles.txt__sectionTitle}>Comments</Text>
     </View>
   );
 };
@@ -351,11 +440,13 @@ const PostScreen = ({route, navigation}) => {
           <Animated.View style={styles.panel__mediaConent(maxHeight)}>
             <ImageSlider images={item._postImages} scrollX={scrollX} />
           </Animated.View>
+
           <View style={styles.panel__ingredients}>
             <Text style={styles.txt__sectionTitle}>Ingredients</Text>
             <View style={styles.panel__allIngredients}>
               <FlatList
                 data={INGREDIENTS}
+                showsHorizontalScrollIndicator={false}
                 renderItem={({item, index}) => (
                   <IngredientView
                     name={item.name}
@@ -375,6 +466,8 @@ const PostScreen = ({route, navigation}) => {
             </View>
           </View>
         </View>
+        <RatingView item={item} />
+        <CommentsView />
         <EmptyView />
       </ScrollView>
     </View>
@@ -415,7 +508,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     position: 'absolute',
     height: 40,
-    width: 40,
+    width: 45,
     left: 15,
   },
   dummy_backSetting: {
@@ -424,13 +517,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     position: 'absolute',
     height: 40,
-    width: 96,
+    width: 101,
     right: 15,
   },
 
   img__appbar: {
-    height: 25,
-    width: 25,
+    height: 30,
+    width: 30,
     tintColor: '#222',
   },
 
@@ -461,7 +554,6 @@ const styles = StyleSheet.create({
   img__icon: {
     height: 30,
     width: 30,
-    tintColor: Colors.inactiveIcon,
   },
   img__avatar: {
     height: 35,
@@ -538,11 +630,11 @@ const styles = StyleSheet.create({
     height: 75,
     width: '100%',
     position: 'absolute',
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.ingredientGreen,
     borderRadius: 15,
     top: 5,
     left: 5,
-    opacity: 0.7,
+    opacity: 0.5,
   },
   panelRecipeDetails: {
     width: '90%',

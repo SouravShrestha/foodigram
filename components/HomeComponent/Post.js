@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {Colors, Images} from '../../resources/resources';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 TouchableOpacity.defaultProps = {activeOpacity: 0.9};
 
@@ -15,7 +15,7 @@ const Post = ({item}) => {
           <Text style={styles.txt__avatar}>{item._username}</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
-          <Image source={Images.iconShare} style={styles.img__icon} />
+          <Image source={Images.iconShare} style={styles.img__icon_inactive} />
         </View>
       </View>
       <TouchableOpacity onPress={() => navigation.navigate('PostScreen', item)}>
@@ -24,27 +24,36 @@ const Post = ({item}) => {
         </View>
       </TouchableOpacity>
       <View style={styles.banner__lowerPost}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', justifyContent:'center'}}>
           <Image
-            source={Images.iconFav}
-            style={[
-              styles.img__icon,
-              item._statusLiked ? {tintColor: Colors.red} : '',
-            ]}
+            source={item._statusLiked ? Images.iconFav : Images.iconLikeOutline}
+            style={
+              item._statusLiked ? styles.img__icon : styles.img__icon_inactive
+            }
           />
-          <Text style={styles.txt__likes}>{item._counterLikes} Likes</Text>
+          <Text style={styles.txt__likes}>{item._counterLikes}</Text>
+          <Image
+            source={Images.iconStar}
+            style={[
+              styles.img__icon, {marginLeft: 10}]
+            }
+          />
+          <Text style={styles.txt__likes}>{item._ratings} <Text style={{
+            color: Colors.secondaryText, fontFamily: 'SFPro-Regular', fontSize: 13
+          }}>({item._peopleRated})</Text></Text>
         </View>
         <View style={{flexDirection: 'row'}}>
           <Image
-            source={Images.iconSave}
-            style={[
-              styles.img__icon,
-              item._statusSaved ? {tintColor: Colors.primary} : '',
-            ]}
+            source={
+              item._statusSaved ? Images.iconSave : Images.iconSaveOutline
+            }
+            style={
+              item._statusSaved ? styles.img__icon : styles.img__icon_inactive
+            }
           />
         </View>
       </View>
-      <View style={{flexDirection: 'row', marginTop: 8, marginLeft: 8}}>
+      <View style={{flexDirection: 'row', marginTop: 5, marginLeft: 8}}>
         <Text>
           <Text style={styles.txt__captionTitle}>{item._postTitle} </Text>
           <Text style={styles.txt__caption}> {item._postDesc}</Text>
@@ -56,11 +65,11 @@ const Post = ({item}) => {
 
 const styles = StyleSheet.create({
   container__post: {
-    marginHorizontal: 15,
+    marginHorizontal: 12,
     marginBottom: 10,
   },
   header__post: {
-    height: 60,
+    height: 50,
     width: '100%',
     justifyContent: 'space-between',
     paddingHorizontal: 5,
@@ -68,30 +77,34 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   img__avatar: {
-    height: 35,
-    width: 35,
-    borderRadius: 17.5,
+    height: 30,
+    width: 30,
+    borderRadius: 15,
   },
   img__icon: {
     height: 30,
     width: 30,
-    tintColor: Colors.inactiveIcon,
+  },
+  img__icon_inactive: {
+    height: 30,
+    width: 30,
+    tintColor: Colors.black,
   },
   txt__avatar: {
     fontSize: 14,
     color: Colors.black,
     fontFamily: 'SFPro-Medium',
-    lineHeight: 30,
+    lineHeight: 28,
     letterSpacing: -0.3,
-    marginLeft: 12,
+    marginLeft: 8,
   },
   txt__likes: {
-    fontSize: 14,
+    fontSize: 15,
     color: Colors.black,
     fontFamily: 'SFPro-Medium',
     lineHeight: 30,
-    letterSpacing: -0.1,
-    marginLeft: 10,
+    letterSpacing: -0.4,
+    marginLeft: 5,
   },
   txt__captionTitle: {
     fontSize: 14,
@@ -113,7 +126,7 @@ const styles = StyleSheet.create({
   img__post: {
     height: '100%',
     width: '100%',
-    borderRadius: 10,
+    borderRadius: 8,
   },
   container__imgPost: {
     height: 280,
