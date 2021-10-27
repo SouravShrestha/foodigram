@@ -224,78 +224,58 @@ const RatingView = ({item}) => {
         style={{
           flexDirection: 'row',
           marginTop: 20,
-          justifyContent: 'space-between',
+          justifyContent: 'space-around',
           width: '90%',
         }}>
-        <View style={{flexDirection: 'row'}}>
-          <Image
-            source={Images.iconStar}
-            style={[styles.img__icon]}
-          />
-          <Text
-            style={[
-              styles.txt__likes,
-              {
-                marginLeft: 4,
-              },
-            ]}>
-            {item._ratings}{' '}
-            <Text
-              style={{
-                color: Colors.secondaryText,
-                fontFamily: 'SFPro-Regular',
-                fontSize: 13,
-              }}>
-              ({item._peopleRated})
-            </Text>
-          </Text>
-        </View>
-
-        <View style={{flexDirection: 'row'}}>
-          <Image
-            source={Images.iconStar}
-            style={[styles.img__icon, {marginLeft: 10}]}
-          />
-          <Image
-            source={Images.iconStar}
-            style={[styles.img__icon, {marginLeft: 10}]}
-          />
-          <Image
-            source={Images.iconStar}
-            style={[styles.img__icon, {marginLeft: 10}]}
-          />
-          <Image
-            source={Images.iconStar}
-            style={[
-              styles.img__icon,
-              {marginLeft: 10, tintColor: Colors.inactiveIcon},
-            ]}
-          />
-          <Image
-            source={Images.iconStar}
-            style={[
-              styles.img__icon,
-              {marginLeft: 10, tintColor: Colors.inactiveIcon},
-            ]}
-          />
-        </View>
+        <Image
+          source={Images.iconStar}
+          style={[styles.img__icon, {marginLeft: 10}]}
+        />
+        <Image
+          source={Images.iconStar}
+          style={[styles.img__icon, {marginLeft: 10}]}
+        />
+        <Image
+          source={Images.iconStar}
+          style={[styles.img__icon, {marginLeft: 10}]}
+        />
+        <Image
+          source={Images.iconStar}
+          style={[
+            styles.img__icon,
+            {marginLeft: 10, tintColor: Colors.inactiveIcon},
+          ]}
+        />
+        <Image
+          source={Images.iconStar}
+          style={[
+            styles.img__icon,
+            {marginLeft: 10, tintColor: Colors.inactiveIcon},
+          ]}
+        />
       </View>
     </View>
   );
 };
 
-const CommentsView = () => {
+const ReviewsView = () => {
   return (
     <View
       style={{
-        height: 300,
         width: '100%',
-        backgroundColor: 'lightblue',
-        marginTop: 25,
+        marginTop: 15,
         paddingHorizontal: 15,
-        paddingVertical: 15
+        paddingVertical: 15,
       }}>
-      <Text style={styles.txt__sectionTitle}>Comments</Text>
+      <Text style={styles.txt__sectionTitle}>Ratings and Reviews</Text>
+      <View
+        style={{
+          width: '100%',
+          flex: 1,
+          marginTop: 15,
+          height: 300,
+          backgroundColor: 'lightblue',
+        }}></View>
     </View>
   );
 };
@@ -466,7 +446,7 @@ const PostScreen = ({route, navigation}) => {
           </View>
         </View>
         <RatingView item={item} />
-        <CommentsView />
+        <ReviewsView />
         <EmptyView />
       </ScrollView>
     </View>
