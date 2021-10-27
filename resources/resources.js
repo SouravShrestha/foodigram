@@ -14,6 +14,11 @@ export const Colors = {
   ingredientYellow: '#FCD55D',
   instructionBack: '#FFE3BF',
   stepNo: '#FF9A00',
+
+  // Transparent colors
+  redTrans: 'rgba(255,88,93, 0.7)',
+  greenTrans: 'rgba(135,213,167, 0.7)',
+  greyTrans: 'rgba(123,123,123, 0.7)',
 };
 
 export const Images = {

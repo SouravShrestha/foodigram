@@ -25,13 +25,13 @@ const Story = ({_image, _color, _name}) => {
 const styles = StyleSheet.create({
   container__story: {
     alignItems:'center',
-    marginRight: 5,
-    marginLeft: 10
+    marginRight: 8,
+    marginLeft: 8
   },
   outline__story: _color => ({
     width: 75,
-    height: 95,
-    borderRadius: 13,
+    height: 75,
+    borderRadius: 37.5,
     borderWidth: 2,
     borderColor: _color,
     justifyContent: 'center',
@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
   }),
   img__story:{
     width: 65,
-    height: 85,
-    borderRadius: 10,
+    height: 65,
+    borderRadius: 32.5,
   },
   label__story:{
     marginTop: 5,

@@ -217,21 +217,20 @@ const RatingView = ({item}) => {
       style={{
         width: '100%',
         paddingHorizontal: 15,
-        alignItems: 'center',
-        marginTop: 10,
+        marginTop: 8,
       }}>
       <Text style={styles.txt__sectionTitle}>Rate the recipe</Text>
       <View
         style={{
           flexDirection: 'row',
           marginTop: 20,
-          justifyContent: 'space-around',
-          width: '100%',
+          justifyContent: 'space-between',
+          width: '90%',
         }}>
         <View style={{flexDirection: 'row'}}>
           <Image
             source={Images.iconStar}
-            style={[styles.img__icon, {marginLeft: 10}]}
+            style={[styles.img__icon]}
           />
           <Text
             style={[
@@ -293,7 +292,7 @@ const CommentsView = () => {
         width: '100%',
         backgroundColor: 'lightblue',
         marginTop: 25,
-        paddingHorizontal: 10,
+        paddingHorizontal: 15,
         paddingVertical: 15
       }}>
       <Text style={styles.txt__sectionTitle}>Comments</Text>
