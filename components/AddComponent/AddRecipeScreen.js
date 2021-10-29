@@ -1,10 +1,10 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-const AddScreen = () => {
+const AddRecipeScreen = () => {
   return (
     <View style={styles.panel__back}>
-      <Text style={styles.txt_temp}>Add Screen</Text>
+      <Text style={styles.txt_temp}> FULL RECIPE </Text>
     </View>
   );
 };
@@ -21,4 +21,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default AddScreen;
+export default AddRecipeScreen;

@@ -1,6 +1,9 @@
 import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import NavigationScreen from './components/WelcomeComponent/NavigationScreen';
+import {LogBox} from 'react-native';
+
+LogBox.ignoreLogs(['Reanimated 2']);
 
 const App = () => {
   return (
