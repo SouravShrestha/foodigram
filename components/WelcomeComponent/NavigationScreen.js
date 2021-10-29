@@ -12,10 +12,7 @@ import {
 } from 'react-native';
 import 'react-native-gesture-handler';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {
-  NavigationContainer,
-  getFocusedRouteNameFromRoute,
-} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {useRef} from 'react';
 import SearchScreen from '../SearchComponent/SearchScreen';
 import {Images, Colors} from '../../resources/resources';
@@ -78,9 +75,6 @@ export default function NavigationScreen() {
     },
   ];
 
-  const [_navigator, setNavigator] = useState(null);
-  const [currentScreen, setCurrentScreen] = useState('HomeScreen');
-
   const tabs = tabs_data.map(item => {
     return (
       <Tab.Screen
@@ -101,7 +95,10 @@ export default function NavigationScreen() {
           ),
         }}
         listeners={({navigation, route}) => ({
-          state: () => {
+          state: e => {
+            if (item._name == 'AddScreenNavigator' && backPressed) {
+              navigation.goBack();
+            }
             setNavigator(navigation);
             setCurrentScreen(item._name);
             Animated.spring(tabOffsetValue, {
@@ -110,6 +107,7 @@ export default function NavigationScreen() {
             }).start();
           },
           tabPress: e => {
+            setBackPressed(false);
             if (
               currentScreen != 'AddScreenNavigator' &&
               item._name == 'AddScreenNavigator'
@@ -128,6 +126,9 @@ export default function NavigationScreen() {
   const [backEnabled, setBackEnabled] = useState(true);
   const [listenerOnBackEnabled, setListenerOnBackEnabled] = useState(true);
   const [sheetSnapPoint, setSheetSnapPoint] = useState(1);
+  const [_navigator, setNavigator] = useState(null);
+  const [currentScreen, setCurrentScreen] = useState('HomeScreen');
+  const [backPressed, setBackPressed] = useState(false);
 
   useEffect(() => {
     setListenerOnBackEnabled(!listenerOnBackEnabled);
@@ -155,6 +156,16 @@ export default function NavigationScreen() {
   }, [listenerOnBackEnabled]);
 
   useEffect(() => {
+    const backAction = () => {
+      setBackPressed(true);
+    };
+    BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+  }, []);
+
+  useEffect(() => {
     bottomSheetRef.current.snapTo(sheetSnapPoint);
   }, [sheetSnapPoint]);
 
@@ -172,7 +183,7 @@ export default function NavigationScreen() {
           style={styles.btn__add}
           onPress={() => {
             _navigator.navigate('AddScreenNavigator', {
-              screen: 'AddRecipeScreen',
+              toScreen: 'AddRecipeScreen',
             });
             setSheetSnapPoint(1);
             setBackEnabled(true);
@@ -184,7 +195,7 @@ export default function NavigationScreen() {
           style={[styles.btn__add, {borderColor: '#E18800'}]}
           onPress={() => {
             _navigator.navigate('AddScreenNavigator', {
-              screen: 'AddOnlyPictureScreen',
+              toScreen: 'AddOnlyPictureScreen',
             });
             setSheetSnapPoint(1);
             setBackEnabled(true);
