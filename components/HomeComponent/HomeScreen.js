@@ -104,7 +104,7 @@ const POST_DATA = [
     _postImages: [
       {
         id: 1,
-        src: Images.img3,
+        src: Images.img4,
       },
     ],
     _userAvatar: Images.person2,
@@ -123,7 +123,7 @@ const POST_DATA = [
     _postImages: [
       {
         id: 1,
-        src: Images.img1,
+        src: Images.img2,
       },
       {
         id: 2,
@@ -211,7 +211,7 @@ const HomeScreen = () => {
         _postImages: [
           {
             id: 1,
-            src: Images.img3,
+            src: Images.img4,
           },
           {
             id: 2,
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light,
   },
   panel__appBar: {
-    height: 56,
+    height: 60,
     width: '100%',
     paddingLeft: 25,
     paddingRight: 25,
@@ -305,8 +305,6 @@ const styles = StyleSheet.create({
   },
   panel__stories: {
     marginTop: 10,
-    paddingLeft: 8,
-    paddingRight: 8,
     height: 115,
   },
   item: {

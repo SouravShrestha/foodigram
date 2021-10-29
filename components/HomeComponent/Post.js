@@ -53,7 +53,7 @@ const Post = ({item}) => {
           />
         </View>
       </View>
-      <View style={{flexDirection: 'row', marginTop: 5, marginLeft: 8}}>
+      <View style={{flexDirection: 'row', marginTop: 5, marginHorizontal: 15}}>
         <Text>
           <Text style={styles.txt__captionTitle}>{item._postTitle} </Text>
           <Text style={styles.txt__caption}> {item._postDesc}</Text>
@@ -65,14 +65,13 @@ const Post = ({item}) => {
 
 const styles = StyleSheet.create({
   container__post: {
-    marginHorizontal: 12,
     marginBottom: 10,
   },
   header__post: {
     height: 50,
     width: '100%',
     justifyContent: 'space-between',
-    paddingHorizontal: 5,
+    paddingHorizontal: 12,
     alignItems: 'center',
     flexDirection: 'row',
   },
@@ -126,16 +125,15 @@ const styles = StyleSheet.create({
   img__post: {
     height: '100%',
     width: '100%',
-    borderRadius: 8,
   },
   container__imgPost: {
-    height: 280,
+    maxHeight: 380,
     width: '100%',
   },
   banner__lowerPost: {
     width: '100%',
     justifyContent: 'space-between',
-    paddingHorizontal: 5,
+    paddingHorizontal: 12,
     alignItems: 'center',
     flexDirection: 'row',
     marginTop: 8,
