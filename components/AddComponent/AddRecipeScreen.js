@@ -1,25 +1,34 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, {useRef} from 'react';
+import {createStackNavigator} from '@react-navigation/stack';
+import StepOne from './AddRecipe/StepOne';
+import StepTwo from './AddRecipe/StepTwo';
+import StepThree from './AddRecipe/StepThree';
 
+const Stack = createStackNavigator();
 
-const AddRecipeScreen = () => {
+const AddRecipeScreen = ({route, navigation}) => {
   return (
-    <View style={styles.panel__back}>
-      <Text style={styles.txt_temp}> FULL RECIPE </Text>
-    </View>
+    <Stack.Navigator initialRouteName="StepOne">
+      <Stack.Screen
+        key={1}
+        name="StepOne"
+        component={StepOne}
+        options={{headerShown: true}}
+      />
+      <Stack.Screen
+        key={2}
+        name="StepTwo"
+        component={StepTwo}
+        options={{headerShown: true}}
+      />
+      <Stack.Screen
+        key={3}
+        name="StepThree"
+        component={StepThree}
+        options={{headerShown: true}}
+      />
+    </Stack.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  panel__back: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    backgroundColor: 'lightblue',
-  },
-  txt_temp: {
-    fontSize: 42,
-  },
-});
 
 export default AddRecipeScreen;

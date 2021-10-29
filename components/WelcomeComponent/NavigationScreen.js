@@ -24,8 +24,12 @@ import BottomSheet from 'reanimated-bottom-sheet';
 
 const Tab = createBottomTabNavigator();
 const SCREEN_HEIGHT = Dimensions.get('screen').height;
+let _currentSnap = 1;
+let _currentScreen = 'HomeScreenNavigator';
 
 export default function NavigationScreen() {
+  const [_navigation, setNavigation] = useState(null);
+
   const tabOffsetValue = useRef(new Animated.Value(0)).current;
   const tabs_data = [
     {
@@ -75,6 +79,9 @@ export default function NavigationScreen() {
     },
   ];
 
+  const bottomSheetRef = React.useRef(null);
+  const [showBackDrawerPanel, setShowBackDrawerPanel] = useState(false);
+
   const tabs = tabs_data.map(item => {
     return (
       <Tab.Screen
@@ -96,84 +103,52 @@ export default function NavigationScreen() {
         }}
         listeners={({navigation}) => ({
           state: () => {
-            //Go 1 step further back to avoid going back to AddScreen(s) views
-            if (item._name == 'AddScreenNavigator' && backPressed) {
-              navigation.goBack();
+            _currentScreen = item._name;
+            if (item._name != 'AddScreenNavigator') {
+              bottomSheetRef.current.snapTo(1);
+              _currentSnap = 1;
+              setShowBackDrawerPanel(false);
             }
-            setNavigator(navigation); //initialize navigation object
-            setCurrentScreen(item._name); //current screen will be used to know the last screen when action button will be clicked again from AddScreen(s) views.
-
+            setNavigation(navigation);
             Animated.spring(tabOffsetValue, {
               toValue: item._toValue,
               useNativeDriver: true,
             }).start();
           },
           tabPress: e => {
-            setBackPressed(false);
-
-            //open bottomsheet and disable back button's normal action(which would have taken the nav screen back)
-            if (
-              currentScreen != 'AddScreenNavigator' &&
-              item._name == 'AddScreenNavigator'
-            ) {
-              setBackEnabled(false);
+            if (item._name == 'AddScreenNavigator') {
               e.preventDefault();
-              setSheetSnapPoint(0);
+              if (_currentScreen != 'AddScreenNavigator') {
+                _currentSnap = 0;
+                bottomSheetRef.current.snapTo(0);
+                setShowBackDrawerPanel(true);
+              }
             } else {
-              setBackEnabled(true); //else, enable the back button
+              bottomSheetRef.current.snapTo(1);
+              _currentSnap = 1;
+              setShowBackDrawerPanel(false);
             }
           },
         })}></Tab.Screen>
     );
   });
 
-  const [backEnabled, setBackEnabled] = useState(true);
-  const [listenerOnBackEnabled, setListenerOnBackEnabled] = useState(true);
-  const [sheetSnapPoint, setSheetSnapPoint] = useState(1);
-  const [_navigator, setNavigator] = useState(null);
-  const [currentScreen, setCurrentScreen] = useState('HomeScreen');
-  const [backPressed, setBackPressed] = useState(false);
-  const bottomSheetRef = React.useRef(null);
-
-  //To make back enabled await async
-  useEffect(() => {
-    setListenerOnBackEnabled(!listenerOnBackEnabled);
-  }, [backEnabled]);
-
-  //Whenever the listenerOnBackEnabled, i.e. backenabled changes
   useEffect(() => {
     const backAction = () => {
-      if (backEnabled) {
-        return false;
-      } else {
-        if (sheetSnapPoint == 0) {
-          setSheetSnapPoint(1);
-          setBackEnabled(true);
-          return true;
-        }
+      if (_currentScreen == 'HomeScreenNavigator' && _currentSnap == 1) {
+        BackHandler.exitApp();
       }
+      let retVal = _currentSnap == 0;
+      bottomSheetRef.current.snapTo(1);
+      setShowBackDrawerPanel(false);
+      _currentSnap = 1;
+      return retVal;
     };
-
-    const backHandler = BackHandler.addEventListener(
+    const handler = BackHandler.addEventListener(
       'hardwareBackPress',
       backAction,
     );
-
-    return () => backHandler.remove();
-  }, [listenerOnBackEnabled]);
-
-  //At every refresh handle back pressed
-  useEffect(() => {
-    const backAction = () => {
-      setBackPressed(true);
-    };
-    BackHandler.addEventListener('hardwareBackPress', backAction);
   }, []);
-
-  //Whenever the snap point changes -> !bottomSheetView
-  useEffect(() => {
-    bottomSheetRef.current.snapTo(sheetSnapPoint);
-  }, [sheetSnapPoint]);
 
   const BottomSheetView = () => (
     <View
@@ -186,11 +161,12 @@ export default function NavigationScreen() {
           activeOpacity={0.6}
           style={styles.btn__add}
           onPress={() => {
-            _navigator.navigate('AddScreenNavigator', {
+            _navigation.navigate('AddScreenNavigator', {
               toScreen: 'AddRecipeScreen',
             });
-            setSheetSnapPoint(1);
-            setBackEnabled(true);
+            bottomSheetRef.current.snapTo(1);
+            setShowBackDrawerPanel(false);
+            _currentSnap = 1;
           }}>
           <Text style={styles.txt_btn}>🥘 Full Recipe</Text>
         </TouchableOpacity>
@@ -198,11 +174,12 @@ export default function NavigationScreen() {
           activeOpacity={0.6}
           style={[styles.btn__add, {borderColor: '#E18800'}]}
           onPress={() => {
-            _navigator.navigate('AddScreenNavigator', {
+            _navigation.navigate('AddScreenNavigator', {
               toScreen: 'AddOnlyPictureScreen',
             });
-            setSheetSnapPoint(1);
-            setBackEnabled(true);
+            bottomSheetRef.current.snapTo(1);
+            setShowBackDrawerPanel(false);
+            _currentSnap = 1;
           }}>
           <Text style={[styles.txt_btn, {color: '#E18800'}]}>
             🖼️ Only pictures
@@ -212,8 +189,9 @@ export default function NavigationScreen() {
           style={styles.btn__cancel}
           activeOpacity={0.6}
           onPress={() => {
-            setSheetSnapPoint(1);
-            setBackEnabled(true);
+            bottomSheetRef.current.snapTo(1);
+            setShowBackDrawerPanel(false);
+            _currentSnap = 1;
           }}>
           <Text style={[styles.txt_btn, {color: Colors.secondaryText}]}>
             Cancel
@@ -231,7 +209,7 @@ export default function NavigationScreen() {
           showLabel: false,
           style: styles.nav__navigator,
         }}
-        backBehavior="history">
+        backBehavior='initialRoute'>
         {tabs}
       </Tab.Navigator>
       <Animated.View
@@ -245,12 +223,14 @@ export default function NavigationScreen() {
           borderRadius: 20,
           transform: [{translateX: tabOffsetValue}],
         }}></Animated.View>
-      {!backEnabled && <View style={styles.panel__backTransparent}></View>}
+      {showBackDrawerPanel && (
+        <View style={styles.panel__backTransparent}></View>
+      )}
       <BottomSheet
         ref={bottomSheetRef}
         snapPoints={[SCREEN_HEIGHT * 0.35, 0]}
         borderRadius={10}
-        initialSnap={sheetSnapPoint}
+        initialSnap={1}
         renderContent={BottomSheetView}
       />
     </NavigationContainer>

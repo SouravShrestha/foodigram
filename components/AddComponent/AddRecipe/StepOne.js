@@ -1,10 +1,15 @@
 import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, BackHandler} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const ExploreScreen = ({route, navigation}) => {
+const StepOne = ({route, navigation}) => {
+
   return (
     <View style={styles.panel__back}>
-      <Text style={styles.txt_temp}>Explore Screen</Text>
+      <Text style={styles.txt_temp}>StepOne</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('StepTwo')}>
+        <Text style={{color: 'black', fontSize: 42}}>NEXT</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -21,4 +26,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExploreScreen;
+export default StepOne;
