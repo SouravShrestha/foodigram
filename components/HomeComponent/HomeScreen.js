@@ -6,10 +6,12 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  RefreshControl,
 } from 'react-native';
 import {Colors, Images, Titles} from '../../resources/resources';
 import Story from './Story';
 import Post from './Post';
+import {useState} from 'react/cjs/react.development';
 
 TouchableOpacity.defaultProps = {activeOpacity: 0.8};
 
@@ -67,7 +69,6 @@ const MY_DATA = [
 ];
 
 const POST_DATA = [
-  {},
   {
     _username: 'sam_amir',
     _id: 1,
@@ -89,7 +90,7 @@ const POST_DATA = [
     ],
     _userAvatar: Images.person3,
     _ratings: 4.8,
-    _peopleRated: 140
+    _peopleRated: 140,
   },
   {
     _username: 'billy_09',
@@ -108,7 +109,7 @@ const POST_DATA = [
     ],
     _userAvatar: Images.person2,
     _ratings: 4.0,
-    _peopleRated: 65
+    _peopleRated: 65,
   },
   {
     _username: 'liligo_09',
@@ -135,7 +136,7 @@ const POST_DATA = [
     ],
     _userAvatar: Images.person4,
     _ratings: 3.6,
-    _peopleRated: 4
+    _peopleRated: 4,
   },
   {
     _username: 'emmapant87',
@@ -158,10 +159,11 @@ const POST_DATA = [
     ],
     _userAvatar: Images.person1,
     _ratings: 2.8,
-    _peopleRated: 23
+    _peopleRated: 23,
   },
-  {},
 ];
+
+const DATA_TO_RENDER = [{}, ...POST_DATA, {}];
 
 const StoriesView = () => (
   <View style={styles.panel__stories}>
@@ -180,11 +182,53 @@ const StoriesView = () => (
 const EmptyView = () => <View style={{height: 100}}></View>;
 
 const HomeScreen = () => {
+  const [myRenderData, setMyRenderData] = useState(DATA_TO_RENDER);
+
   // Scoll to top --> callled on clicking app name in titlebar
   const flatlistRef = useRef();
   const ScrollToTop = () => {
     flatlistRef.current.scrollToIndex({index: 0});
   };
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  function handleRefresh() {
+    //start refresh spinner
+    setRefreshing(true);
+
+    //Dummy data added
+    setMyRenderData([
+      {},
+      {
+        _username: 'new_user',
+        _id: 12,
+        _counterLikes: 12,
+        _statusSaved: true,
+        _postTitle: 'Green Salad New',
+        _postDesc:
+          'Doloribus error blanditiis dolorem incidunt sed vero. Consequatur officia nemo ipsa harum architecto non cupiditate sed rerum.',
+        _statusLiked: false,
+        _postImages: [
+          {
+            id: 1,
+            src: Images.img3,
+          },
+          {
+            id: 2,
+            src: Images.img2,
+          },
+        ],
+        _userAvatar: Images.person2,
+        _ratings: 3.8,
+        _peopleRated: 140,
+      },
+      ...POST_DATA,
+      {},
+    ]);
+
+    //stop refresh spinner
+    setRefreshing(false);
+  }
 
   // Home screen view
   return (
@@ -206,10 +250,10 @@ const HomeScreen = () => {
       <View style={styles.back__container}>
         <FlatList
           ref={flatlistRef}
-          data={POST_DATA}
+          data={myRenderData}
           showsVerticalScrollIndicator={false}
           renderItem={({item, index}) =>
-            index > 0 && index != POST_DATA.length - 1 ? (
+            index > 0 && index != myRenderData.length - 1 ? (
               <Post item={item} />
             ) : index == 0 ? (
               <StoriesView />
@@ -218,6 +262,9 @@ const HomeScreen = () => {
             )
           }
           keyExtractor={(item, index) => item + index}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
         />
       </View>
     </View>
