@@ -30,7 +30,7 @@ export default function NavigationScreen() {
   const tabs_data = [
     {
       id: 1,
-      _name: 'Home',
+      _name: 'HomeScreenNavigator',
       _component: HomeScreenNavigator,
       _image: Images.iconHome,
       _tintColor: Colors.black,
@@ -39,7 +39,7 @@ export default function NavigationScreen() {
     },
     {
       id: 2,
-      _name: 'Search',
+      _name: 'SearchScreen',
       _component: SearchScreen,
       _image: Images.iconSearch,
       _tintColor: Colors.black,
@@ -57,7 +57,7 @@ export default function NavigationScreen() {
     },
     {
       id: 4,
-      _name: 'Explore',
+      _name: 'ExploreScreen',
       _component: ExploreScreen,
       _image: Images.iconExplore,
       _tintColor: Colors.black,
@@ -66,7 +66,7 @@ export default function NavigationScreen() {
     },
     {
       id: 5,
-      _name: 'Profile',
+      _name: 'ProfileScreen',
       _component: ProfileScreen,
       _image: Images.iconAvatar,
       _style: styles.img__tab,
@@ -94,13 +94,15 @@ export default function NavigationScreen() {
             />
           ),
         }}
-        listeners={({navigation, route}) => ({
-          state: e => {
+        listeners={({navigation}) => ({
+          state: () => {
+            //Go 1 step further back to avoid going back to AddScreen(s) views
             if (item._name == 'AddScreenNavigator' && backPressed) {
               navigation.goBack();
             }
-            setNavigator(navigation);
-            setCurrentScreen(item._name);
+            setNavigator(navigation); //initialize navigation object
+            setCurrentScreen(item._name); //current screen will be used to know the last screen when action button will be clicked again from AddScreen(s) views.
+
             Animated.spring(tabOffsetValue, {
               toValue: item._toValue,
               useNativeDriver: true,
@@ -108,6 +110,8 @@ export default function NavigationScreen() {
           },
           tabPress: e => {
             setBackPressed(false);
+
+            //open bottomsheet and disable back button's normal action(which would have taken the nav screen back)
             if (
               currentScreen != 'AddScreenNavigator' &&
               item._name == 'AddScreenNavigator'
@@ -116,7 +120,7 @@ export default function NavigationScreen() {
               e.preventDefault();
               setSheetSnapPoint(0);
             } else {
-              setBackEnabled(true);
+              setBackEnabled(true); //else, enable the back button
             }
           },
         })}></Tab.Screen>
@@ -129,11 +133,14 @@ export default function NavigationScreen() {
   const [_navigator, setNavigator] = useState(null);
   const [currentScreen, setCurrentScreen] = useState('HomeScreen');
   const [backPressed, setBackPressed] = useState(false);
+  const bottomSheetRef = React.useRef(null);
 
+  //To make back enabled await async
   useEffect(() => {
     setListenerOnBackEnabled(!listenerOnBackEnabled);
   }, [backEnabled]);
 
+  //Whenever the listenerOnBackEnabled, i.e. backenabled changes
   useEffect(() => {
     const backAction = () => {
       if (backEnabled) {
@@ -155,21 +162,18 @@ export default function NavigationScreen() {
     return () => backHandler.remove();
   }, [listenerOnBackEnabled]);
 
+  //At every refresh handle back pressed
   useEffect(() => {
     const backAction = () => {
       setBackPressed(true);
     };
-    BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
+    BackHandler.addEventListener('hardwareBackPress', backAction);
   }, []);
 
+  //Whenever the snap point changes -> !bottomSheetView
   useEffect(() => {
     bottomSheetRef.current.snapTo(sheetSnapPoint);
   }, [sheetSnapPoint]);
-
-  const bottomSheetRef = React.useRef(null);
 
   const BottomSheetView = () => (
     <View
