@@ -105,7 +105,7 @@ export default function NavigationScreen() {
           state: () => {
             _currentScreen = item._name;
             if (item._name != 'AddScreenNavigator') {
-              bottomSheetRef.current.snapTo(1);
+              bottomSheetRef?.current?.snapTo(1);
               _currentSnap = 1;
               setShowBackDrawerPanel(false);
             }
@@ -120,11 +120,11 @@ export default function NavigationScreen() {
               e.preventDefault();
               if (_currentScreen != 'AddScreenNavigator') {
                 _currentSnap = 0;
-                bottomSheetRef.current.snapTo(0);
+                bottomSheetRef?.current?.snapTo(0);
                 setShowBackDrawerPanel(true);
               }
             } else {
-              bottomSheetRef.current.snapTo(1);
+              bottomSheetRef?.current?.snapTo(1);
               _currentSnap = 1;
               setShowBackDrawerPanel(false);
             }
@@ -136,11 +136,13 @@ export default function NavigationScreen() {
   useEffect(() => {
     const backAction = () => {
       if (_currentScreen == 'HomeScreenNavigator' && _currentSnap == 1) {
-        BackHandler.exitApp();
+        //on home screen
       }
       let retVal = _currentSnap == 0;
-      bottomSheetRef.current.snapTo(1);
-      setShowBackDrawerPanel(false);
+      if (retVal) {
+        bottomSheetRef?.current?.snapTo(1);
+        setShowBackDrawerPanel(false);
+      }
       _currentSnap = 1;
       return retVal;
     };
@@ -164,7 +166,7 @@ export default function NavigationScreen() {
             _navigation.navigate('AddScreenNavigator', {
               toScreen: 'AddRecipeScreen',
             });
-            bottomSheetRef.current.snapTo(1);
+            bottomSheetRef?.current?.snapTo(1);
             setShowBackDrawerPanel(false);
             _currentSnap = 1;
           }}>
@@ -177,7 +179,7 @@ export default function NavigationScreen() {
             _navigation.navigate('AddScreenNavigator', {
               toScreen: 'AddOnlyPictureScreen',
             });
-            bottomSheetRef.current.snapTo(1);
+            bottomSheetRef?.current?.snapTo(1);
             setShowBackDrawerPanel(false);
             _currentSnap = 1;
           }}>
@@ -189,7 +191,7 @@ export default function NavigationScreen() {
           style={styles.btn__cancel}
           activeOpacity={0.6}
           onPress={() => {
-            bottomSheetRef.current.snapTo(1);
+            bottomSheetRef?.current?.snapTo(1);
             setShowBackDrawerPanel(false);
             _currentSnap = 1;
           }}>
@@ -209,7 +211,7 @@ export default function NavigationScreen() {
           showLabel: false,
           style: styles.nav__navigator,
         }}
-        backBehavior='initialRoute'>
+        backBehavior="initialRoute">
         {tabs}
       </Tab.Navigator>
       <Animated.View

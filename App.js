@@ -4,6 +4,8 @@ import NavigationScreen from './components/WelcomeComponent/NavigationScreen';
 import {LogBox} from 'react-native';
 
 LogBox.ignoreLogs(['Reanimated 2']);
+LogBox.ignoreLogs(['Internal React error']);
+LogBox.ignoreLogs(["EventEmitter.removeListener('change', ...)"]);
 
 const App = () => {
   return (
