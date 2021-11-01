@@ -240,9 +240,7 @@ const HomeScreen = () => {
         <Text style={styles.txt__appName} onPress={ScrollToTop}>
           {Titles.AppName}
         </Text>
-        <TouchableOpacity>
-          
-        </TouchableOpacity>
+        <TouchableOpacity></TouchableOpacity>
       </View>
       <View style={styles.back__container}>
         <FlatList
@@ -284,16 +282,16 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   txt__appName: {
-    fontSize: 28,
+    fontSize: 24,
     color: Colors.black,
-    fontFamily: 'SFPro-SemiBold',
+    fontFamily: 'SFPro-Medium',
     textAlign: 'center',
     letterSpacing: -1,
-    marginLeft: 20
+    marginLeft: 20,
   },
   img__appbar: {
     width: undefined,
-    height: 18,
+    height: 14,
     aspectRatio: 1,
   },
   img__appbarSettings: {
