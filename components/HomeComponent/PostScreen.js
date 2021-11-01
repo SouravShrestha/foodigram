@@ -9,6 +9,7 @@ import {
   Animated,
   Dimensions,
   useWindowDimensions,
+  StatusBar,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Colors, Images} from '../../resources/resources';
@@ -86,35 +87,23 @@ const AppHeader = ({opacity, reverseOpacity, navigation}) => {
     <View>
       <View style={styles.container__appHeader}>
         <Animated.View
-          style={[
-            styles.dummy_backApp,
-            {
-              opacity: reverseOpacity,
-            },
-          ]}
+          style={[styles.dummy_backApp]}
           onPress={() => GoBack()}></Animated.View>
         <TouchableOpacity
           style={[
             {
-              padding: 8,
+              padding: 10,
               borderRadius: 10,
             },
           ]}
           onPress={() => GoBack()}>
           <Image source={Images.iconBack} style={styles.img__appbar} />
         </TouchableOpacity>
-        <Animated.View
-          style={[
-            styles.dummy_backSetting,
-            {
-              opacity: reverseOpacity,
-            },
-          ]}></Animated.View>
+        <Animated.View style={[styles.dummy_backSetting]}></Animated.View>
         <View
           style={{
             flexDirection: 'row',
-            padding: 8,
-            borderRadius: 10,
+            padding: 10,
           }}>
           <Image
             source={Images.iconSaveOutlineWide}
@@ -380,8 +369,7 @@ const PostScreen = ({route, navigation}) => {
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  paddingHorizontal: 15,
-                  marginTop: 10,
+                  marginTop: 20,
                 }}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Image source={Images.iconTimer} style={styles.img__time} />
@@ -397,7 +385,6 @@ const PostScreen = ({route, navigation}) => {
                 </View>
               </View>
             </View>
-            <View style={styles.container__backRecipeDetails}></View>
           </View>
           <View style={styles.panel__media}>
             <TouchableOpacity
@@ -482,32 +469,31 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   dummy_backApp: {
-    padding: 8,
-    borderRadius: 10,
+    borderRadius: 20,
     backgroundColor: Colors.white,
     position: 'absolute',
     height: 40,
-    width: 45,
-    left: 15,
+    width: 40,
+    left: 18,
   },
   dummy_backSetting: {
     padding: 8,
-    borderRadius: 10,
+    borderRadius: 20,
     backgroundColor: Colors.white,
     position: 'absolute',
     height: 40,
-    width: 101,
+    width: 100,
     right: 15,
   },
 
   img__appbar: {
-    height: 30,
-    width: 30,
+    height: 25,
+    width: 25,
     tintColor: '#222',
   },
 
   container__images: {
-    height: 275,
+    height: 250,
     width: '100%',
   },
   txt__likes: {
@@ -527,8 +513,6 @@ const styles = StyleSheet.create({
   img__post: {
     height: '100%',
     width: '100%',
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
   },
   img__icon: {
     height: 30,
@@ -568,22 +552,19 @@ const styles = StyleSheet.create({
   },
   container__postDetails: {
     height: 100,
-    width: '85%',
-    backgroundColor: Colors.light,
+    width: '90%',
+    backgroundColor: Colors.white,
     elevation: 3,
     borderTopColor: '#fff',
     shadowColor: '#999',
-    borderRadius: 25,
+    borderRadius: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingRight: 10,
   },
   container__recipeDetails: {
-    height: 75,
     width: '100%',
-    borderColor: Colors.black,
-    borderWidth: 2,
-    borderRadius: 15,
+    borderColor: Colors.secondaryText,
     zIndex: 1,
     justifyContent: 'center',
   },
@@ -592,7 +573,6 @@ const styles = StyleSheet.create({
     color: Colors.black,
     fontFamily: 'SFPro-Bold',
     lineHeight: 20,
-    paddingLeft: 15,
   },
   img__time: {
     height: 15,
@@ -604,16 +584,6 @@ const styles = StyleSheet.create({
     color: Colors.black,
     fontFamily: 'SFPro-Medium',
     marginLeft: 8,
-  },
-  container__backRecipeDetails: {
-    height: 75,
-    width: '100%',
-    position: 'absolute',
-    backgroundColor: Colors.ingredientGreen,
-    borderRadius: 15,
-    top: 5,
-    left: 5,
-    opacity: 0.5,
   },
   panelRecipeDetails: {
     width: '90%',
@@ -652,7 +622,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    elevation: 10.5,
+    elevation: 3,
     borderTopColor: '#eee',
     shadowColor: '#999',
   },

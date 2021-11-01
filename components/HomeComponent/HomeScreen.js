@@ -241,10 +241,7 @@ const HomeScreen = () => {
           {Titles.AppName}
         </Text>
         <TouchableOpacity>
-          <Image
-            source={Images.iconSettings}
-            style={styles.img__appbarSettings}
-          />
+          
         </TouchableOpacity>
       </View>
       <View style={styles.back__container}>
@@ -275,7 +272,7 @@ const styles = StyleSheet.create({
   back__container: {
     flex: 1,
     width: '100%',
-    backgroundColor: Colors.light,
+    backgroundColor: Colors.white,
   },
   panel__appBar: {
     height: 60,
@@ -284,14 +281,15 @@ const styles = StyleSheet.create({
     paddingRight: 25,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
   },
   txt__appName: {
     fontSize: 28,
     color: Colors.black,
     fontFamily: 'SFPro-SemiBold',
     textAlign: 'center',
-    letterSpacing: -2,
+    letterSpacing: -1,
+    marginLeft: 20
   },
   img__appbar: {
     width: undefined,
@@ -304,8 +302,8 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   panel__stories: {
-    marginTop: 10,
-    height: 115,
+    paddingTop: 10,
+    height: 120,
   },
   item: {
     backgroundColor: '#f9c2ff',

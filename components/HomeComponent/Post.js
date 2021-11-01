@@ -28,14 +28,14 @@ const Post = ({item}) => {
           <Image
             source={item._statusLiked ? Images.iconFav : Images.iconLikeOutline}
             style={
-              item._statusLiked ? styles.img__icon : styles.img__icon_inactive
+              item._statusLiked ? [styles.img__icon, {tintColor: Colors.red}] : styles.img__icon_inactive
             }
           />
           <Text style={styles.txt__likes}>{item._counterLikes}</Text>
           <Image
             source={Images.iconStar}
             style={[
-              styles.img__icon, {marginLeft: 10}]
+              styles.img__icon, {marginLeft: 10, tintColor: Colors.yellow}]
             }
           />
           <Text style={styles.txt__likes}>{item._ratings} <Text style={{
@@ -65,7 +65,8 @@ const Post = ({item}) => {
 
 const styles = StyleSheet.create({
   container__post: {
-    marginBottom: 10,
+    marginTop: 10,
+    marginBottom: 5
   },
   header__post: {
     height: 50,
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
     fontFamily: 'SFPro-Medium',
     lineHeight: 28,
-    letterSpacing: -0.3,
+    letterSpacing: -0.2,
     marginLeft: 8,
   },
   txt__likes: {
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
     fontFamily: 'SFPro-Medium',
     lineHeight: 30,
-    letterSpacing: -0.4,
+    letterSpacing: -0.2,
     marginLeft: 5,
   },
   txt__captionTitle: {
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
     fontFamily: 'SFPro-SemiBold',
     lineHeight: 30,
-    letterSpacing: -0.5,
+    letterSpacing: -0.2,
     marginLeft: 10,
     lineHeight: 24,
   },
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
     fontFamily: 'SFPro-Regular',
     lineHeight: 30,
-    letterSpacing: -0.6,
+    letterSpacing: -0.2,
     lineHeight: 24,
   },
   img__post: {

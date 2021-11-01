@@ -205,7 +205,7 @@ export default function NavigationScreen() {
 
   return (
     <NavigationContainer style={{flex: 1}}>
-      <StatusBar backgroundColor={Colors.light} barStyle="dark-content" />
+      <StatusBar backgroundColor={Colors.white} barStyle="dark-content" />
       <Tab.Navigator
         tabBarOptions={{
           showLabel: false,
@@ -257,14 +257,14 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   nav__navigator: {
-    backgroundColor: 'white',
+    backgroundColor: Colors.white,
     position: 'absolute',
     bottom: 30,
     marginHorizontal: 20,
     height: 60,
     borderRadius: 10,
     elevation: 10.5,
-    borderTopColor: '#eee',
+    borderTopColor: Colors.white,
     shadowColor: '#999',
     paddingHorizontal: 5,
   },
