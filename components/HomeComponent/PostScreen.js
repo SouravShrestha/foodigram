@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import {
   StatusBar,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {Colors, Images} from '../../resources/resources';
 
 const INGREDIENTS = [
@@ -200,7 +201,12 @@ const ImageSlider = ({images, scrollX}) => {
   );
 };
 
-const RatingView = ({item}) => {
+const RatingView = ({navigation}) => {
+  const [defaultRating, setDefaultRating] = useState(1);
+  const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
+  // callbackfunc = (childData) => {
+  //   setDefaultRating(childData)
+  // }
   return (
     <View
       style={{
@@ -209,40 +215,39 @@ const RatingView = ({item}) => {
         marginTop: 8,
       }}>
       <Text style={styles.txt__sectionTitle}>Rate the recipe</Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          marginTop: 20,
-          justifyContent: 'space-around',
-          width: '90%',
-        }}>
-        <Image
-          source={Images.iconStar}
-          style={[styles.img__icon, {marginLeft: 10}]}
-        />
-        <Image
-          source={Images.iconStar}
-          style={[styles.img__icon, {marginLeft: 10}]}
-        />
-        <Image
-          source={Images.iconStar}
-          style={[styles.img__icon, {marginLeft: 10}]}
-        />
-        <Image
-          source={Images.iconStar}
-          style={[
-            styles.img__icon,
-            {marginLeft: 10, tintColor: Colors.inactiveIcon},
-          ]}
-        />
-        <Image
-          source={Images.iconStar}
-          style={[
-            styles.img__icon,
-            {marginLeft: 10, tintColor: Colors.inactiveIcon},
-          ]}
-        />
+      <View style={styles.customRatingBarStyle}>
+          {maxRating.map((item,key) => {
+            return (
+              <TouchableOpacity 
+              activeOpacity={0.7}
+              key={item}
+              onPress={() => {navigation.navigate('ReviewAndRating',{starNumber: setDefaultRating})}}>
+                <Image
+                  style={styles.starImageStyle}
+                  source={
+                     item <=defaultRating ? Images.filledStar : Images.cornerStar
+                  }
+                />
+              </TouchableOpacity>
+            );
+          })}
       </View>
+      { /*<SafeAreaView style={styles.container_star}>
+          <View style={styles.container_star}>
+          <Text style={styles.txt__sectionTitle}>
+          
+          {defaultRating} / {Math.max.apply(null, maxRating)}
+          </Text>
+          <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.buttonStyle}
+          onPress={() => alert(defaultRating)}>
+          <Text style={styles.buttonTextStyle}>
+            Get Selected Value
+          </Text>
+          </TouchableOpacity>
+          </View>
+        </SafeAreaView>*/}
     </View>
   );
 };
@@ -432,7 +437,7 @@ const PostScreen = ({route, navigation}) => {
             </View>
           </View>
         </View>
-        <RatingView item={item} />
+        <RatingView navigation={navigation} />
         <ReviewsView />
         <EmptyView />
       </ScrollView>
@@ -720,6 +725,34 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingLeft: 15,
     paddingRight: 10,
+  },
+  customRatingBarStyle: {
+    justifyContent: 'center',
+    flexDirection: 'row',
+    marginTop: 30,
+  },
+  starImageStyle: {
+    width: 50,
+    height: 50,
+    resizeMode: 'cover',
+     },
+  container_star: {
+    flex: 1,
+    backgroundColor: 'white',
+    padding: 10,
+    justifyContent: 'center',
+    textAlign: 'center',
+  },
+  buttonStyle: {
+    justifyContent: 'center',
+    flexDirection: 'row',
+    marginTop: 30,
+    padding: 15,
+    backgroundColor: '#8ad24e',
+  },
+  buttonTextStyle: {
+    color: '#fff',
+    textAlign: 'center',
   },
 });
 

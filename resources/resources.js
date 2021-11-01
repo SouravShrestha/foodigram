@@ -56,6 +56,8 @@ export const Images = {
   person2: require('../assets/images/person-2.png'),
   person3: require('../assets/images/person-3.png'),
   person4: require('../assets/images/person-4.png'),
+  filledStar: require('../assets/images/star-filled.png'),
+  cornerStar: require('../assets/images/star-corner.png'), 
 };
 
 export const Titles = {
