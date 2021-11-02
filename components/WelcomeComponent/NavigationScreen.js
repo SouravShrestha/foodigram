@@ -9,6 +9,8 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Keyboard,
+  Platform,
 } from 'react-native';
 import 'react-native-gesture-handler';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -174,7 +176,7 @@ export default function NavigationScreen() {
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.6}
-          style={[styles.btn__add, {borderColor: '#E18800'}]}
+          style={[styles.btn__add, {borderColor: Colors.primary}]}
           onPress={() => {
             _navigation.navigate('AddScreenNavigator', {
               toScreen: 'AddOnlyPictureScreen',
@@ -183,7 +185,7 @@ export default function NavigationScreen() {
             setShowBackDrawerPanel(false);
             _currentSnap = 1;
           }}>
-          <Text style={[styles.txt_btn, {color: '#E18800'}]}>
+          <Text style={[styles.txt_btn, {color: Colors.primary}]}>
             🖼️ Only pictures
           </Text>
         </TouchableOpacity>
@@ -203,13 +205,56 @@ export default function NavigationScreen() {
     </View>
   );
 
+  const [navBarBottom, setNavbarBottom] = useState(30);
+  useEffect(() => {
+    const handleKeyboardShow = () => {
+      setNavbarBottom(-10);
+    };
+    const handleKeyboardHide = () => {
+      setNavbarBottom(30);
+    };
+    let keyboardDidHide, keyboardWillShow, keyboardWillHide, keyboardDidShow;
+
+    if (Platform.OS === 'ios') {
+      keyboardWillShow = Keyboard.addListener(
+        'keyboardWillShow',
+        handleKeyboardShow,
+      );
+
+      keyboardWillHide = Keyboard.addListener(
+        'keyboardWillHide',
+        handleKeyboardHide,
+      );
+    } else {
+      keyboardDidShow = Keyboard.addListener(
+        'keyboardDidShow',
+        handleKeyboardShow,
+      );
+
+      keyboardDidHide = Keyboard.addListener(
+        'keyboardDidHide',
+        handleKeyboardHide,
+      );
+    }
+
+    return () => {
+      if (Platform.OS === 'ios') {
+        keyboardWillHide?.remove();
+        keyboardWillShow?.remove();
+      } else {
+        keyboardDidShow?.remove();
+        keyboardDidHide?.remove();
+      }
+    };
+  }, []);
+
   return (
     <NavigationContainer style={{flex: 1}}>
-      <StatusBar backgroundColor={Colors.white} barStyle="dark-content" />
       <Tab.Navigator
         tabBarOptions={{
           showLabel: false,
-          style: styles.nav__navigator,
+          style: styles.nav__navigator(navBarBottom),
+          keyboardHidesTabBar: true,
         }}
         backBehavior="initialRoute">
         {tabs}
@@ -220,7 +265,7 @@ export default function NavigationScreen() {
           height: 3,
           backgroundColor: Colors.black,
           position: 'absolute',
-          bottom: 30,
+          bottom: navBarBottom,
           left: 40,
           borderRadius: 20,
           transform: [{translateX: tabOffsetValue}],
@@ -256,10 +301,10 @@ const styles = StyleSheet.create({
     width: '100%',
     aspectRatio: 1,
   },
-  nav__navigator: {
+  nav__navigator: navBarBottom => ({
     backgroundColor: Colors.white,
     position: 'absolute',
-    bottom: 30,
+    bottom: navBarBottom,
     marginHorizontal: 20,
     height: 60,
     borderRadius: 10,
@@ -267,7 +312,7 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.white,
     shadowColor: '#999',
     paddingHorizontal: 5,
-  },
+  }),
   img__tint: _tintColor => ({
     tintColor: _tintColor,
   }),
@@ -292,18 +337,18 @@ const styles = StyleSheet.create({
   },
   btn__add: {
     alignItems: 'center',
-    width: '75%',
+    width: '85%',
     justifyContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: 32,
-    borderRadius: 8,
-    borderColor: '#4232D0',
+    borderRadius: 5,
+    borderColor: Colors.primary,
     borderWidth: 1.75,
     marginTop: 30,
   },
   txt_btn: {
     fontSize: 16,
-    color: '#4232D0',
+    color: Colors.primary,
     fontFamily: 'SFPro-Medium',
   },
   btn__cancel: {

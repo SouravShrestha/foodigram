@@ -25,7 +25,7 @@ const Story = ({_image, _color, _name}) => {
 const styles = StyleSheet.create({
   container__story: {
     alignItems:'center',
-    marginLeft: 16,
+    marginLeft: 12,
     marginRight: 8,
     maxWidth: 75
   },

@@ -1,10 +1,10 @@
 export const Colors = {
-  primary: '#4A154B',
+  primary: '#001B94',
   yellow: '#FFCB37',
   white: '#FFF',
   blue: '#36C5F0',
   black: '#2e2e2e',
-  green: '#2EB67D',
+  green: '#1C8770',
   secondaryText: '#7B7B7B',
   red: '#E01E5A',
   inactiveIcon: '#C4C4C4',

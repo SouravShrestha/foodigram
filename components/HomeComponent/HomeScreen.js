@@ -7,11 +7,13 @@ import {
   Image,
   FlatList,
   RefreshControl,
+  StatusBar,
 } from 'react-native';
 import {Colors, Images, Titles} from '../../resources/resources';
 import Story from './Story';
 import Post from './Post';
 import {useState} from 'react/cjs/react.development';
+import { useIsFocused } from '@react-navigation/native';
 
 TouchableOpacity.defaultProps = {activeOpacity: 0.8};
 
@@ -230,9 +232,15 @@ const HomeScreen = () => {
     setRefreshing(false);
   }
 
+  function FocusAwareStatusBar(props) {
+    const isFocused = useIsFocused();
+    return isFocused ? <StatusBar {...props} /> : null;
+  }
+
   // Home screen view
   return (
     <View style={styles.back__container}>
+      <FocusAwareStatusBar backgroundColor={Colors.white} barStyle="dark-content" />
       <View style={styles.panel__appBar}>
         <TouchableOpacity>
           <Image source={Images.iconMenu} style={styles.img__appbar} />
@@ -284,7 +292,7 @@ const styles = StyleSheet.create({
   txt__appName: {
     fontSize: 24,
     color: Colors.black,
-    fontFamily: 'SFPro-Medium',
+    fontFamily: 'SFPro-SemiBold',
     textAlign: 'center',
     letterSpacing: -1,
     marginLeft: 20,
