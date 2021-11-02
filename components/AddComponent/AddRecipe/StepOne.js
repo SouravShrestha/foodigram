@@ -44,7 +44,7 @@ const StepOne = ({route, navigation}) => {
   return (
     <View style={styles.panel__back}>
       <ScrollView
-      showsHorizontalScrollIndicator={false}
+      showsHorizontalScrollIndicator={true}
         style={{
           width: '100%',
           backgroundColor: Colors.white,
