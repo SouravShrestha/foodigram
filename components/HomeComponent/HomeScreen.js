@@ -8,12 +8,14 @@ import {
   FlatList,
   RefreshControl,
   StatusBar,
+  TextInput,
 } from 'react-native';
 import {Colors, Images, Titles} from '../../resources/resources';
 import Story from './Story';
 import Post from './Post';
 import {useState} from 'react/cjs/react.development';
-import { useIsFocused } from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
+import {Theme} from '../Shared/Theme';
 
 TouchableOpacity.defaultProps = {activeOpacity: 0.8};
 
@@ -167,20 +169,6 @@ const POST_DATA = [
 
 const DATA_TO_RENDER = [{}, ...POST_DATA, {}];
 
-const StoriesView = () => (
-  <View style={styles.panel__stories}>
-    <FlatList
-      data={MY_DATA}
-      showsHorizontalScrollIndicator={false}
-      renderItem={({item}) => (
-        <Story _image={item.image} _color={item.color} _name={item.name} />
-      )}
-      keyExtractor={(item, index) => item + index}
-      horizontal={true}
-    />
-  </View>
-);
-
 const EmptyView = () => <View style={{height: 100}}></View>;
 
 const HomeScreen = () => {
@@ -192,7 +180,46 @@ const HomeScreen = () => {
     flatlistRef.current.scrollToIndex({index: 0});
   };
 
+  const StoriesView = () => (
+    <View
+      style={{
+        backgroundColor: Theme.colorAppBar,
+        borderBottomLeftRadius: 15,
+        borderBottomRightRadius: 15,
+        paddingTop: 5,
+      }}>
+      <View style={styles.panel__stories}>
+        <FlatList
+          data={MY_DATA}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({item}) => (
+            <Story _image={item.image} _color={item.color} _name={item.name} />
+          )}
+          keyExtractor={(item, index) => item + index}
+          horizontal={true}
+        />
+      </View>
+      <View
+        style={{
+          width: '100%',
+          borderBottomLeftRadius: 15,
+          borderBottomRightRadius: 15,
+          paddingBottom: 5,
+          paddingTop: 5,
+          height: 70
+        }}>
+        <TextInput
+          style={[styles.input]}
+          placeholder="Search here"
+          placeholderTextColor={Colors.secondaryText}
+          selectionColor={Theme.colorText}
+        />
+      </View>
+    </View>
+  );
+
   const [refreshing, setRefreshing] = useState(false);
+  const [searchBarShow, setSearchBarShow] = useState(false);
 
   function handleRefresh() {
     //start refresh spinner
@@ -237,19 +264,64 @@ const HomeScreen = () => {
     return isFocused ? <StatusBar {...props} /> : null;
   }
 
+  function HandleScroll(e) {
+    console.log(e.nativeEvent.contentOffset.y);
+    if (e.nativeEvent.contentOffset.y >= 114.5) {
+      if (!searchBarShow) {
+        setSearchBarShow(true);
+      }
+    } else {
+      if (searchBarShow) {
+        setSearchBarShow(false);
+      }
+    }
+  }
+
   // Home screen view
   return (
     <View style={styles.back__container}>
-      <FocusAwareStatusBar backgroundColor={Colors.white} barStyle="dark-content" />
+      <FocusAwareStatusBar
+        backgroundColor={Theme.colorAppBar}
+        barStyle={Theme.colorStatusBarIcons}
+      />
       <View style={styles.panel__appBar}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <TouchableOpacity>
+            <Image source={Images.iconMenu} style={styles.img__appbar} />
+          </TouchableOpacity>
+          <Text style={styles.txt__appName} onPress={ScrollToTop}>
+            {Titles.AppName}
+          </Text>
+        </View>
         <TouchableOpacity>
-          <Image source={Images.iconMenu} style={styles.img__appbar} />
+          <Image
+            source={Images.iconBell}
+            style={[styles.img__appbar, {width: 25, height: 25}]}
+          />
         </TouchableOpacity>
-        <Text style={styles.txt__appName} onPress={ScrollToTop}>
-          {Titles.AppName}
-        </Text>
-        <TouchableOpacity></TouchableOpacity>
       </View>
+      {searchBarShow && (
+        <View
+          style={{
+            width: '100%',
+            backgroundColor: Theme.colorAppBar,
+            borderBottomLeftRadius: 15,
+            borderBottomRightRadius: 15,
+            paddingBottom: 5,
+            position: 'absolute',
+            top: 68,
+            zIndex: 100,
+            height: 70,
+            paddingTop: 5,
+          }}>
+          <TextInput
+            style={[styles.input]}
+            placeholder="Search here"
+            placeholderTextColor={Colors.secondaryText}
+            selectionColor={Theme.colorText}
+          />
+        </View>
+      )}
       <View style={styles.back__container}>
         <FlatList
           ref={flatlistRef}
@@ -268,6 +340,7 @@ const HomeScreen = () => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
+          onScroll={HandleScroll}
         />
       </View>
     </View>
@@ -278,29 +351,31 @@ const styles = StyleSheet.create({
   back__container: {
     flex: 1,
     width: '100%',
-    backgroundColor: Colors.white,
+    backgroundColor: Theme.colorBack,
   },
   panel__appBar: {
-    height: 60,
+    height: 68,
     width: '100%',
     paddingLeft: 25,
     paddingRight: 25,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
+    backgroundColor: Theme.colorAppBar,
   },
   txt__appName: {
-    fontSize: 24,
-    color: Colors.black,
-    fontFamily: 'SFPro-SemiBold',
+    fontSize: 26,
+    color: Theme.colorText,
+    fontFamily: 'SFPro-Medium',
     textAlign: 'center',
     letterSpacing: -1,
     marginLeft: 20,
   },
   img__appbar: {
     width: undefined,
-    height: 14,
+    height: 16,
     aspectRatio: 1,
+    tintColor: Theme.colorText,
   },
   img__appbarSettings: {
     width: undefined,
@@ -308,8 +383,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   panel__stories: {
-    paddingTop: 10,
-    height: 120,
+    height: 110,
   },
   item: {
     backgroundColor: '#f9c2ff',
@@ -322,6 +396,17 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
+  },
+  input: {
+    height: 45,
+    borderRadius: 5,
+    color: Theme.colorText,
+    marginHorizontal: 20,
+    fontFamily: 'SFPro-Regular',
+    fontSize: 14,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: Theme.colorInputBox,
   },
 });
 

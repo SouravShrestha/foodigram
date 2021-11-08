@@ -12,34 +12,36 @@ import {
   StatusBar,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {useIsFocused} from '@react-navigation/native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {Colors, Images} from '../../resources/resources';
+import {Theme} from '../Shared/Theme';
 
 const INGREDIENTS = [
   {
     name: 'Tomato',
     qunatity: 1,
-    color: Colors.ingredientRed,
+    color: Theme.ingredientRed,
   },
   {
     name: 'Greens',
     qunatity: 3,
-    color: Colors.ingredientGreen,
+    color: Theme.ingredientGreen,
   },
   {
     name: 'Onion',
     qunatity: 5,
-    color: Colors.ingredientPurple,
+    color: Theme.ingredientPurple,
   },
   {
     name: 'Cheese',
     qunatity: 1,
-    color: Colors.ingredientYellow,
+    color: Theme.ingredientYellow,
   },
   {
     name: 'Potato',
     qunatity: 2,
-    color: Colors.ingredientGreen,
+    color: Theme.ingredientGreen,
   },
 ];
 
@@ -53,12 +55,12 @@ const AllSteps = STEPS.map((item, index) => {
   const _styles = StyleSheet.create({
     text_stepNo: {
       fontSize: 16,
-      color: Colors.stepNo,
+      color: Theme.stepNo,
       fontFamily: 'SFPro-Bold',
     },
     text_step: {
       fontSize: 16,
-      color: Colors.black,
+      color: Theme.black,
       fontFamily: 'SFPro-Regular',
       marginTop: 10,
       letterSpacing: -0.1,
@@ -216,23 +218,27 @@ const RatingView = ({navigation}) => {
       }}>
       <Text style={styles.txt__sectionTitle}>Rate the recipe</Text>
       <View style={styles.customRatingBarStyle}>
-          {maxRating.map((item,key) => {
-            return (
-              <TouchableOpacity 
+        {maxRating.map((item, key) => {
+          return (
+            <TouchableOpacity
               activeOpacity={0.7}
               key={item}
-              onPress={() => {navigation.navigate('ReviewAndRating',{starNumber: setDefaultRating})}}>
-                <Image
-                  style={styles.starImageStyle}
-                  source={
-                     item <=defaultRating ? Images.filledStar : Images.cornerStar
-                  }
-                />
-              </TouchableOpacity>
-            );
-          })}
+              onPress={() => {
+                navigation.navigate('ReviewAndRating', {
+                  starNumber: setDefaultRating,
+                });
+              }}>
+              <Image
+                style={styles.starImageStyle}
+                source={
+                  item <= defaultRating ? Images.filledStar : Images.cornerStar
+                }
+              />
+            </TouchableOpacity>
+          );
+        })}
       </View>
-      { /*<SafeAreaView style={styles.container_star}>
+      {/*<SafeAreaView style={styles.container_star}>
           <View style={styles.container_star}>
           <Text style={styles.txt__sectionTitle}>
           
@@ -321,8 +327,17 @@ const PostScreen = ({route, navigation}) => {
     _showMedia = !_showMedia;
   };
 
+  function FocusAwareStatusBar(props) {
+    const isFocused = useIsFocused();
+    return isFocused ? <StatusBar {...props} /> : null;
+  }
+
   return (
     <View style={styles.panel__back}>
+      <FocusAwareStatusBar
+        backgroundColor={Theme.colorAppBar}
+        barStyle={Theme.colorStatusBarIcons}
+      />
       <AppHeader
         opacity={_opacity}
         reverseOpacity={_reverseOpacity}
@@ -448,7 +463,7 @@ const PostScreen = ({route, navigation}) => {
 const styles = StyleSheet.create({
   panel__back: {
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: Theme.colorBack,
   },
 
   container__appHeader: {
@@ -469,13 +484,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 1,
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: Theme.colorAppBar,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   dummy_backApp: {
     borderRadius: 20,
-    backgroundColor: Colors.white,
+    backgroundColor: Theme.colorAppBar,
     position: 'absolute',
     height: 40,
     width: 40,
@@ -484,7 +499,7 @@ const styles = StyleSheet.create({
   dummy_backSetting: {
     padding: 8,
     borderRadius: 20,
-    backgroundColor: Colors.white,
+    backgroundColor: Theme.colorAppBar,
     position: 'absolute',
     height: 40,
     width: 100,
@@ -494,7 +509,7 @@ const styles = StyleSheet.create({
   img__appbar: {
     height: 25,
     width: 25,
-    tintColor: '#222',
+    tintColor: Theme.colorText,
   },
 
   container__images: {
@@ -503,7 +518,7 @@ const styles = StyleSheet.create({
   },
   txt__likes: {
     fontSize: 14,
-    color: Colors.black,
+    color: Theme.colorText,
     fontFamily: 'SFPro-Medium',
     lineHeight: 30,
     letterSpacing: -0.1,
@@ -530,7 +545,7 @@ const styles = StyleSheet.create({
   },
   txt__avatar: {
     fontSize: 13,
-    color: Colors.black,
+    color: Theme.colorText,
     fontFamily: 'SFPro-Medium',
     lineHeight: 30,
     letterSpacing: -0.3,
@@ -539,7 +554,7 @@ const styles = StyleSheet.create({
   },
   txt__postdDesc: {
     fontSize: 12,
-    color: Colors.black,
+    color: Theme.colorText,
     fontFamily: 'SFPro-Regular',
     letterSpacing: -0.2,
     marginLeft: 12,
@@ -548,7 +563,7 @@ const styles = StyleSheet.create({
   },
   txt__postedOn: {
     fontSize: 10,
-    color: Colors.secondaryText,
+    color: Theme.secondaryText,
     fontFamily: 'SFPro-Regular',
     lineHeight: 30,
     letterSpacing: -0.3,
@@ -558,10 +573,8 @@ const styles = StyleSheet.create({
   container__postDetails: {
     height: 100,
     width: '90%',
-    backgroundColor: Colors.white,
-    elevation: 3,
-    borderTopColor: '#fff',
-    shadowColor: '#999',
+    backgroundColor: Theme.colorAppBar,
+    elevation: 1,
     borderRadius: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -569,24 +582,24 @@ const styles = StyleSheet.create({
   },
   container__recipeDetails: {
     width: '100%',
-    borderColor: Colors.secondaryText,
+    borderColor: Theme.secondaryText,
     zIndex: 1,
     justifyContent: 'center',
   },
   txt__postTitle: {
     fontSize: 16,
-    color: Colors.black,
+    color: Theme.colorText,
     fontFamily: 'SFPro-Bold',
     lineHeight: 20,
   },
   img__time: {
     height: 15,
     width: 15,
-    tintColor: Colors.black,
+    tintColor: Theme.colorText,
   },
   txt__time: {
     fontSize: 14,
-    color: Colors.black,
+    color: Theme.colorText,
     fontFamily: 'SFPro-Medium',
     marginLeft: 8,
   },
@@ -620,16 +633,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   container__media: {
-    backgroundColor: Colors.white,
+    backgroundColor: Theme.colorAppBar,
     borderRadius: 8,
     flexDirection: 'row',
     height: 30,
     paddingHorizontal: 15,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    elevation: 3,
-    borderTopColor: '#eee',
-    shadowColor: '#999',
+    elevation: 1,
   },
   img__action: {
     height: 15,
@@ -639,7 +650,7 @@ const styles = StyleSheet.create({
   txt__media: {
     marginLeft: 10,
     fontSize: 14,
-    color: Colors.black,
+    color: Theme.colorText,
     fontFamily: 'SFPro-Medium',
   },
   inactive__media: {
@@ -683,19 +694,19 @@ const styles = StyleSheet.create({
   }),
   txt_ingredientName: {
     fontSize: 14,
-    color: Colors.black,
+    color: Theme.colorText,
     fontFamily: 'SFPro-Medium',
     marginTop: 10,
   },
   txt_ingredientQuantity: {
     fontSize: 11,
-    color: Colors.secondaryText,
+    color: Theme.secondaryText,
     fontFamily: 'SFPro-Medium',
     marginTop: 2,
   },
   txt__sectionTitle: {
     fontSize: 18,
-    color: Colors.black,
+    color: Theme.colorText,
     fontFamily: 'SFPro-SemiBold',
     marginLeft: 5,
   },
@@ -707,7 +718,7 @@ const styles = StyleSheet.create({
   container__instruction: {
     width: '98%',
     marginTop: 20,
-    backgroundColor: Colors.instructionBack,
+    backgroundColor: Theme.instructionBack,
     borderRadius: 15,
     paddingTop: 20,
     paddingHorizontal: 20,
@@ -735,7 +746,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     resizeMode: 'cover',
-     },
+  },
   container_star: {
     flex: 1,
     backgroundColor: 'white',

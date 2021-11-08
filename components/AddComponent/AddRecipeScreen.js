@@ -14,7 +14,7 @@ import {
   Animated,
   Easing,
 } from 'react-native';
-import {Colors, Images} from '../../resources/resources';
+import {Colors, Images, DarkTheme} from '../../resources/resources';
 
 const Stack = createStackNavigator();
 
@@ -57,14 +57,14 @@ const AddRecipeScreen = ({_navigation}) => {
   }, [stateStep]);
 
   return (
-    <View style={{flex: 1, backgroundColor: Colors.primary}}>
+    <View style={{flex: 1, backgroundColor: DarkTheme.colorAppBar}}>
       <FocusAwareStatusBar
-        backgroundColor={Colors.primary}
+        backgroundColor={DarkTheme.colorAppBar}
         barStyle="light-content"
       />
       <View
         style={{
-          backgroundColor: Colors.primary,
+          backgroundColor: DarkTheme.colorAppBar,
           paddingVertical: 20,
         }}>
         <View

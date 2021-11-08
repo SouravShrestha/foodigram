@@ -17,12 +17,13 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {useRef} from 'react';
 import SearchScreen from '../SearchComponent/SearchScreen';
-import {Images, Colors} from '../../resources/resources';
+import {Images, Colors, DarkTheme} from '../../resources/resources';
 import ProfileScreen from '../ProfileComponent/ProfileScreen';
 import AddScreenNavigator from '../AddComponent/AddScreenNavigator';
 import ExploreScreen from '../ExploreComponent/ExploreScreen';
 import HomeScreenNavigator from '../HomeComponent/HomeScreenNavigator';
 import BottomSheet from 'reanimated-bottom-sheet';
+import { Theme } from '../Shared/Theme';
 
 const Tab = createBottomTabNavigator();
 const SCREEN_HEIGHT = Dimensions.get('screen').height;
@@ -39,7 +40,7 @@ export default function NavigationScreen() {
       _name: 'HomeScreenNavigator',
       _component: HomeScreenNavigator,
       _image: Images.iconHome,
-      _tintColor: Colors.black,
+      _tintColor: Theme.colorActive,
       _style: styles.img__tab,
       _toValue: 0,
     },
@@ -48,7 +49,7 @@ export default function NavigationScreen() {
       _name: 'SearchScreen',
       _component: SearchScreen,
       _image: Images.iconSearch,
-      _tintColor: Colors.black,
+      _tintColor: Theme.colorActive,
       _style: styles.img__tab,
       _toValue: getWidth(),
     },
@@ -57,7 +58,7 @@ export default function NavigationScreen() {
       _name: 'AddScreenNavigator',
       _component: AddScreenNavigator,
       _image: Images.iconAdd,
-      _tintColor: Colors.black,
+      _tintColor: Theme.colorActive,
       _style: styles.img__tabaction,
       _toValue: getWidth() * 2,
     },
@@ -66,7 +67,7 @@ export default function NavigationScreen() {
       _name: 'ExploreScreen',
       _component: ExploreScreen,
       _image: Images.iconExplore,
-      _tintColor: Colors.black,
+      _tintColor: Theme.colorActive,
       _style: styles.img__tab,
       _toValue: getWidth() * 3,
     },
@@ -96,9 +97,13 @@ export default function NavigationScreen() {
               source={item._image}
               style={[
                 item._style,
-                !focused || item._tintColor == 'none'
-                  ? ''
-                  : styles.img__tint(item._tintColor),
+                !focused
+                  ? item._tintColor != 'none'
+                    ? {tintColor: Theme.colorInactive}
+                    : ''
+                  : item._tintColor != 'none'
+                  ? styles.img__tint(item._tintColor)
+                  : '',
               ]}
             />
           ),
@@ -176,7 +181,7 @@ export default function NavigationScreen() {
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.6}
-          style={[styles.btn__add, {borderColor: Colors.primary}]}
+          style={[styles.btn__add]}
           onPress={() => {
             _navigation.navigate('AddScreenNavigator', {
               toScreen: 'AddOnlyPictureScreen',
@@ -185,9 +190,7 @@ export default function NavigationScreen() {
             setShowBackDrawerPanel(false);
             _currentSnap = 1;
           }}>
-          <Text style={[styles.txt_btn, {color: Colors.primary}]}>
-            🖼️ Only pictures
-          </Text>
+          <Text style={[styles.txt_btn]}>🖼️ Only pictures</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btn__cancel}
@@ -263,7 +266,7 @@ export default function NavigationScreen() {
         style={{
           width: getWidth() - 28,
           height: 3,
-          backgroundColor: Colors.black,
+          backgroundColor: Theme.colorActive,
           position: 'absolute',
           bottom: navBarBottom,
           left: 40,
@@ -302,15 +305,14 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   nav__navigator: navBarBottom => ({
-    backgroundColor: Colors.white,
+    backgroundColor: Theme.colorAppBar,
     position: 'absolute',
     bottom: navBarBottom,
     marginHorizontal: 20,
     height: 60,
     borderRadius: 10,
     elevation: 10.5,
-    borderTopColor: Colors.white,
-    shadowColor: '#999',
+    borderTopColor: Theme.colorAppBar,
     paddingHorizontal: 5,
   }),
   img__tint: _tintColor => ({
@@ -318,14 +320,14 @@ const styles = StyleSheet.create({
   }),
 
   panel__backTransparent: {
-    backgroundColor: Colors.black,
+    backgroundColor: Theme.colorBack,
     position: 'absolute',
     height: '100%',
     width: '100%',
     opacity: 0.5,
   },
   panel__bottomSheet: {
-    backgroundColor: Colors.white,
+    backgroundColor: Theme.colorAppBar,
     height: '100%',
     borderRadius: 25,
     width: '100%',
@@ -342,13 +344,13 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 5,
-    borderColor: Colors.primary,
+    borderColor: Theme.colorBorderButton,
     borderWidth: 1.75,
     marginTop: 30,
   },
   txt_btn: {
     fontSize: 16,
-    color: Colors.primary,
+    color: Theme.colorText,
     fontFamily: 'SFPro-Medium',
   },
   btn__cancel: {
@@ -361,7 +363,7 @@ const styles = StyleSheet.create({
   },
   txt_heading: {
     fontSize: 19,
-    color: Colors.black,
+    color: Theme.colorText,
     fontFamily: 'SFPro-SemiBold',
     marginBottom: 15,
   },

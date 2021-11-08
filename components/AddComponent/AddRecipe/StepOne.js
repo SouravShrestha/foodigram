@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {Colors} from '../../../resources/resources';
+import {Colors, DarkTheme} from '../../../resources/resources';
 import RadioForm, {
   RadioButton,
   RadioButtonInput,
@@ -47,7 +47,7 @@ const StepOne = ({route, navigation}) => {
       showsVerticalScrollIndicator={false}
         style={{
           width: '100%',
-          backgroundColor: Colors.white,
+          backgroundColor: DarkTheme.colorBack,
           borderTopLeftRadius: 25,
           borderTopRightRadius: 25,
           paddingHorizontal: 20,
@@ -57,7 +57,7 @@ const StepOne = ({route, navigation}) => {
           <Text
             style={{
               fontFamily: 'SFPro-SemiBold',
-              color: Colors.black,
+              color: DarkTheme.colorText,
               fontSize: 26,
             }}>
             Recipe Info
@@ -78,17 +78,17 @@ const StepOne = ({route, navigation}) => {
           <Text
             style={{
               fontFamily: 'SFPro-Medium',
-              color: Colors.black,
+              color: DarkTheme.colorText,
               fontSize: 14,
               marginTop: 8,
             }}>
             Dish Name
           </Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, {borderColor: DarkTheme.colorText}]}
             placeholder="E.g. Chicken Biryani"
             placeholderTextColor={Colors.secondaryText}
-            selectionColor={Colors.primary}
+            selectionColor={DarkTheme.colorText}
           />
         </View>
 
@@ -116,7 +116,7 @@ const StepOne = ({route, navigation}) => {
                   onPress={value => onPress(value)}
                   labelStyle={{
                     fontSize: 14,
-                    color: Colors.black,
+                    color: DarkTheme.colorText,
                     fontFamily: 'SFPro-Medium',
                   }}
                   labelWrapStyle={{}}
@@ -130,7 +130,7 @@ const StepOne = ({route, navigation}) => {
           <Text
             style={{
               fontFamily: 'SFPro-Medium',
-              color: Colors.black,
+              color: DarkTheme.colorText,
               fontSize: 14,
               marginTop: 10,
             }}>
@@ -140,17 +140,17 @@ const StepOne = ({route, navigation}) => {
             multiline={true}
             textAlign={'left'}
             numberOfLines={5}
-            selectionColor={Colors.primary}
+            selectionColor={DarkTheme.colorText}
             style={[
               styles.input,
               {
                 height: 100,
-                borderColor: Colors.secondaryText,
+                borderColor: DarkTheme.secondaryText,
                 textAlignVertical: 'top',
               },
             ]}
             placeholder="E.g. Biryani is a mixed rice dish originating among the Muslims of the Indian subcontinent. It is made with Indian spices, rice, and meat usually that of chicken and vegetables regional varieties."
-            placeholderTextColor={Colors.secondaryText}
+            placeholderTextColor={DarkTheme.secondaryText}
           />
         </View>
 
@@ -158,7 +158,7 @@ const StepOne = ({route, navigation}) => {
           <Text
             style={{
               fontFamily: 'SFPro-Medium',
-              color: Colors.black,
+              color: DarkTheme.colorText,
               fontSize: 14,
             }}>
             Other Details
@@ -167,17 +167,17 @@ const StepOne = ({route, navigation}) => {
             <TextInput
               style={[
                 styles.input,
-                {width: 100, borderColor: Colors.secondaryText},
+                {width: 100, borderColor: DarkTheme.secondaryText},
               ]}
-              selectionColor={Colors.primary}
+              selectionColor={DarkTheme.colorText}
               placeholder="30"
-              placeholderTextColor={Colors.secondaryText}
+              placeholderTextColor={DarkTheme.secondaryText}
               keyboardType="number-pad"
             />
             <Text
               style={{
                 fontFamily: 'SFPro-Medium',
-                color: Colors.black,
+                color: DarkTheme.colorText,
                 fontSize: 14,
                 marginLeft: 14,
               }}>
@@ -189,17 +189,17 @@ const StepOne = ({route, navigation}) => {
               <TextInput
                 style={[
                   styles.input,
-                  {width: 75, borderColor: Colors.secondaryText},
+                  {width: 75, borderColor: DarkTheme.secondaryText},
                 ]}
                 placeholder="30"
-                placeholderTextColor={Colors.secondaryText}
+                placeholderTextColor={DarkTheme.secondaryText}
                 keyboardType="number-pad"
-                selectionColor={Colors.primary}
+                selectionColor={DarkTheme.colorText}
               />
               <Text
                 style={{
                   fontFamily: 'SFPro-Medium',
-                  color: Colors.black,
+                  color: DarkTheme.colorText,
                   fontSize: 14,
                   marginLeft: 15,
                 }}>
@@ -215,17 +215,17 @@ const StepOne = ({route, navigation}) => {
               <TextInput
                 style={[
                   styles.input,
-                  {width: 50, borderColor: Colors.secondaryText},
+                  {width: 50, borderColor: DarkTheme.secondaryText},
                 ]}
-                selectionColor={Colors.primary}
+                selectionColor={DarkTheme.colorText}
                 placeholder="30"
-                placeholderTextColor={Colors.secondaryText}
+                placeholderTextColor={DarkTheme.secondaryText}
                 keyboardType="number-pad"
               />
               <Text
                 style={{
                   fontFamily: 'SFPro-Medium',
-                  color: Colors.black,
+                  color: DarkTheme.colorText,
                   fontSize: 14,
                   marginLeft: 15,
                 }}>
@@ -239,7 +239,7 @@ const StepOne = ({route, navigation}) => {
               navigation.navigate('StepTwo');
             }}
             style={{
-              backgroundColor: Colors.primary,
+              backgroundColor: DarkTheme.colorAppBar,
               width: '100%',
               paddingVertical: 15,
               alignItems: 'center',
@@ -249,7 +249,7 @@ const StepOne = ({route, navigation}) => {
             <Text
               style={{
                 fontFamily: 'SFPro-Medium',
-                color: Colors.white,
+                color: DarkTheme.colorText,
                 fontSize: 16,
               }}>
               Next
@@ -269,12 +269,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    backgroundColor: Colors.primary,
+    backgroundColor: DarkTheme.colorAppBar,
   },
   input: {
     height: 45,
     borderRadius: 5,
-    color: Colors.black,
+    color: DarkTheme.colorText,
     marginVertical: 15,
     fontFamily: 'SFPro-Regular',
     fontSize: 14,

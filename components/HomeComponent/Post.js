@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {Colors, Images} from '../../resources/resources';
 import {useNavigation} from '@react-navigation/native';
+import { Theme } from '../Shared/Theme';
 
 TouchableOpacity.defaultProps = {activeOpacity: 0.9};
 
@@ -48,7 +49,7 @@ const Post = ({item}) => {
               item._statusSaved ? Images.iconSave : Images.iconSaveOutline
             }
             style={
-              item._statusSaved ? styles.img__icon : styles.img__icon_inactive
+              item._statusSaved ? [styles.img__icon, {tintColor: Theme.colorIconActive}] : styles.img__icon_inactive
             }
           />
         </View>
@@ -88,27 +89,27 @@ const styles = StyleSheet.create({
   img__icon_inactive: {
     height: 30,
     width: 30,
-    tintColor: Colors.black,
+    tintColor: Theme.colorIcons,
   },
   txt__avatar: {
     fontSize: 14,
-    color: Colors.black,
+    color: Theme.colorText,
     fontFamily: 'SFPro-Medium',
     lineHeight: 28,
     letterSpacing: -0.2,
     marginLeft: 8,
   },
   txt__likes: {
-    fontSize: 15,
-    color: Colors.black,
+    fontSize: 14,
+    color: Theme.colorText,
     fontFamily: 'SFPro-Medium',
     lineHeight: 30,
     letterSpacing: -0.2,
     marginLeft: 5,
   },
   txt__captionTitle: {
-    fontSize: 14,
-    color: Colors.black,
+    fontSize: 13,
+    color: Theme.colorText,
     fontFamily: 'SFPro-SemiBold',
     lineHeight: 30,
     letterSpacing: -0.2,
@@ -116,11 +117,11 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   txt__caption: {
-    fontSize: 14,
-    color: Colors.black,
+    fontSize: 13,
+    color: Theme.colorText,
     fontFamily: 'SFPro-Regular',
     lineHeight: 30,
-    letterSpacing: -0.2,
+    letterSpacing: 0.1,
     lineHeight: 24,
   },
   img__post: {
